@@ -1,0 +1,17 @@
+let
+    integer    i,g,ds5;
+    real w,k;
+in
+if i > 9 then
+    i := 3;
+fi;
+i := 0.4 + 3;
+\\isto eh um comentario
+while i >= 2 do
+	read g;
+	write g;
+end;
+
+skip;
+i :=9 + 2;
+end
