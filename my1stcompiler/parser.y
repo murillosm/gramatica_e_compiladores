@@ -11,14 +11,15 @@
     char *ystr;
 }
 %start begin
-%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON 
+%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE
 %token IDENTIFIER CLASS_IDENTIFIER
 %token <yint> NUMBER
 %token <yfloat> FLOAT
 %token <ystr> STRING
-%token TRUE FALSE CONSOLE_LOG VAR CONST FLOAT_TYPE BOOLEAN_TYPE RETURN FUNCTION
+%token TRUE FALSE CONSOLE_LOG VAR CONST RETURN FUNCTION
 %token LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA
 %token SINGLE_QUOTE ADD MINUS DOT DOUBLE_QUOTE MULT DIV EXP GT LT
+%token EQ BACKTICK DOLLAR
 %left '-' '+'
 %left '*' '/'
 %right '^'
@@ -64,6 +65,7 @@ parameter_list:
 
 function_call:
     IDENTIFIER LPARENTHESES argument_list RPARENTHESES SEMICOLON
+    | IDENTIFIER LPARENTHESES argument_list RPARENTHESES
 ;
 
 argument_list:
@@ -82,19 +84,34 @@ expression_statement:
 
 return_statement:
     RETURN expression SEMICOLON
+    | RETURN expression
 ;
 
 expression:
     NUMBER
     | FLOAT
     | STRING
+    | TRUE
+    | FALSE
     | IDENTIFIER
     | array
+    | function_call
     | expression ADD expression
     | expression MINUS expression
     | expression MULT expression
     | expression DIV expression
     | LPARENTHESES expression RPARENTHESES
+    | BACKTICK interpolated_expression BACKTICK
+;
+
+interpolated_expression:
+    interpolated_part
+    | interpolated_expression interpolated_part
+;
+
+interpolated_part:
+    STRING
+    | DOLLAR LBRACE expression RBRACE
 ;
 
 array:
@@ -104,7 +121,6 @@ array:
 array_elements:
     expression
     | expression COMMA array_elements
-    | /* empty */
 ;
 
 %%
