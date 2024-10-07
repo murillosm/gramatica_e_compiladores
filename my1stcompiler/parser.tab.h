@@ -46,22 +46,42 @@ extern int yydebug;
   enum yytokentype
   {
     LET = 258,
-    INTEGER = 259,
-    IN = 260,
-    SKIP = 261,
-    IF = 262,
-    FI = 263,
-    THEN = 264,
-    ELSE = 265,
-    END = 266,
-    WHILE = 267,
-    DO = 268,
-    READ = 269,
-    WRITE = 270,
-    ATRIB = 271,
-    NUMERO = 272,
-    REAL = 273,
-    ID = 274
+    COLON = 259,
+    NUMBER_TYPE = 260,
+    STRING_TYPE = 261,
+    ASSIGN = 262,
+    SEMICOLON = 263,
+    IDENTIFIER = 264,
+    CLASS_IDENTIFIER = 265,
+    NUMBER = 266,
+    FLOAT = 267,
+    STRING = 268,
+    TRUE = 269,
+    FALSE = 270,
+    CONSOLE_LOG = 271,
+    VAR = 272,
+    CONST = 273,
+    FLOAT_TYPE = 274,
+    BOOLEAN_TYPE = 275,
+    RETURN = 276,
+    FUNCTION = 277,
+    LBRACKET = 278,
+    RBRACKET = 279,
+    LBRACE = 280,
+    RBRACE = 281,
+    LPARENTHESES = 282,
+    RPARENTHESES = 283,
+    COMMA = 284,
+    SINGLE_QUOTE = 285,
+    ADD = 286,
+    MINUS = 287,
+    DOT = 288,
+    DOUBLE_QUOTE = 289,
+    MULT = 290,
+    DIV = 291,
+    EXP = 292,
+    GT = 293,
+    LT = 294
   };
 #endif
 
@@ -70,13 +90,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 28 "parser.y" /* yacc.c:1909  */
+#line 8 "parser.y" /* yacc.c:1909  */
 
-    char * ystr;
-    int   yint;
+    int yint;
     float yfloat;
+    char *ystr;
 
-#line 80 "parser.tab.h" /* yacc.c:1909  */
+#line 100 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

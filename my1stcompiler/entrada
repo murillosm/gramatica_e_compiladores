@@ -1,17 +1,19 @@
-let
-    integer    i,g,ds5;
-    real w,k;
-in
-if i > 9 then
-    i := 3;
-fi;
-i := 0.4 + 3;
-\\isto eh um comentario
-while i >= 2 do
-	read g;
-	write g;
-end;
+let w = 100;
+let x = 200;
+let nome = "João"
 
-skip;
-i :=9 + 2;
-end
+var s = 10;
+var t = 'murillo';
+var e = 1.2
+
+const g = 7;
+
+function somar(a, b) {
+    return a + b;
+}
+
+let resultado = somar(5, 3);
+
+console.log("O resultado da soma é: " + resultado);
+
+let arr = [1, 2, 3];
