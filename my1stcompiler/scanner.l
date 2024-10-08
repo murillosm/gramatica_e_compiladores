@@ -53,14 +53,15 @@ function        { printf("Reconhecido: FUNCTION\n"); return(FUNCTION); }
 "^"             { printf("Reconhecido: EXP\n"); return EXP; }
 ">"             { printf("Reconhecido: GT\n"); return GT; }
 "<"             { printf("Reconhecido: LT\n"); return LT; }
-"\""            { printf("Reconhecido: DOUBLE_QUOTE\n"); return DOUBLE_QUOTE; }
-"'"             { printf("Reconhecido: SINGLE_QUOTE\n"); return SINGLE_QUOTE; }
-"`"             { printf("Reconhecido: BACKTICK\n"); return BACKTICK; }
-"\$"           { printf("Reconhecido: DOLLAR\n"); return DOLLAR; }
+"\""            { /* Ignorar aspas duplas isoladas */ }
+"'"             { /* Ignorar aspas simples isoladas */ }
+"`"             { /* Ignorar crase isolada */ }
+"\$"            { printf("Reconhecido: DOLLAR\n"); return DOLLAR; }
 
 {ID}       { printf("Reconhecido: IDENTIFIER (%s)\n", yytext); return(IDENTIFIER); }
-
-[ \t\n]+   ; /* ignora espaços em branco */
+"//".*     { /* Ignorar comentários de linha única */ }
+"\n"                { /*incrementa sozinho lineno*/ }
+[ \t]+              { /*ignorar espaços em branco*/ }
 .          { return yytext[0]; }
 
 %%

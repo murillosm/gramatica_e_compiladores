@@ -13,6 +13,20 @@ const g = 7;
 const h = 'medeiros';
 const i = 3.4;
 
+let add = w + x;
+let sub = w - x;
+let mult = w * x;
+let div = w / x;
+console.log(add);
+console.log(sub);
+console.log(mult);
+console.log(div);
+
+var da = w * (x + 1);
+
+console.log("O resultado da adição é: " + da);
+
+
 function somar(a, b) {
     return a + b;
 }
