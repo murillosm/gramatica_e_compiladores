@@ -1,0 +1,67 @@
+%{
+#include "parser.tab.h"
+%}
+%option yylineno
+
+NUMBER [0-9]+
+ID [a-zA-Z_][0-9a-zA-Z_]*
+FLOAT [0-9]*\.[0-9]+
+STRING_SINGLE_QUOTE \'[^\']*\'
+STRING_DOUBLE_QUOTE \"[^\"]*\"
+STRING_CRASIS_QUOTE \`[^`]*\`
+TRUE true
+FALSE false 
+
+%%
+
+{NUMBER}        { return(NUMBER); }
+{STRING_SINGLE_QUOTE}   { return(STRING); }
+{STRING_DOUBLE_QUOTE}   { return(STRING); }
+{STRING_CRASIS_QUOTE}   { return(STRING); }
+{FLOAT}         {  return(FLOAT); }
+{TRUE}          { return(TRUE); }
+{FALSE}         { return(FALSE); }
+
+"console.log"   { return (CONSOLE_LOG); }
+
+let             { return(LET); }
+var             { return(VAR); }
+const           { return(CONST); }
+number          { return(NUMBER_TYPE); }
+string          { return(STRING_TYPE); }
+float           { return(NUMBER_TYPE); }
+boolean         { return(BOOLEAN_TYPE); }
+return          { return(RETURN); }
+function        { return(FUNCTION); }
+
+"="             { return(ASSIGN); }
+"=="            { return(EQ); }
+":"             { return(COLON); }
+";"             { return(SEMICOLON); }
+"["             { return (LBRACKET); }
+"]"             { return (RBRACKET); }
+"{"             { return (LBRACE); }
+"}"             { return (RBRACE); }
+"("             { return (LPARENTHESES); }
+")"             { return (RPARENTHESES); }
+","             { return (COMMA); }
+"+"             { return ADD; }
+"-"             { return MINUS; }
+"."             { return DOT; }
+"*"             { return MULT; }
+"/"             { return DIV; }
+"^"             { return EXP; }
+">"             { return GT; }
+"<"             { return LT; }
+"\""            { /* Ignorar aspas duplas isoladas */ }
+"'"             { /* Ignorar aspas simples isoladas */ }
+"`"             { /* Ignorar crase isolada */ }
+"\$"            { return DOLLAR; }
+
+{ID}       {return(IDENTIFIER); }
+"//".*     { /* Ignorar comentários de linha única */ }
+"\n"                { /*incrementa sozinho lineno*/ }
+[ \t]+              { /*ignorar espaços em branco*/ }
+.          { return yytext[0]; }
+
+%%

@@ -45,45 +45,47 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    LET = 258,
-    COLON = 259,
-    NUMBER_TYPE = 260,
-    STRING_TYPE = 261,
-    ASSIGN = 262,
-    SEMICOLON = 263,
-    BOOLEAN_TYPE = 264,
-    IDENTIFIER = 265,
-    CLASS_IDENTIFIER = 266,
-    NUMBER = 267,
-    FLOAT = 268,
-    STRING = 269,
-    TRUE = 270,
-    FALSE = 271,
-    CONSOLE_LOG = 272,
-    VAR = 273,
-    CONST = 274,
-    RETURN = 275,
-    FUNCTION = 276,
-    LBRACKET = 277,
-    RBRACKET = 278,
-    LBRACE = 279,
-    RBRACE = 280,
-    LPARENTHESES = 281,
-    RPARENTHESES = 282,
-    COMMA = 283,
-    SINGLE_QUOTE = 284,
-    ADD = 285,
-    MINUS = 286,
-    DOT = 287,
-    DOUBLE_QUOTE = 288,
-    MULT = 289,
-    DIV = 290,
-    EXP = 291,
-    GT = 292,
-    LT = 293,
-    EQ = 294,
-    BACKTICK = 295,
-    DOLLAR = 296
+    IDENTIFIER = 258,
+    STRING = 259,
+    NUMBER = 260,
+    LET = 261,
+    VAR = 262,
+    CONST = 263,
+    ASSIGN = 264,
+    SEMICOLON = 265,
+    DOUBLE_QUOTE = 266,
+    SINGLE_QUOTE = 267,
+    CRASIS_QUOTE = 268,
+    LPAREN = 269,
+    RPAREN = 270,
+    CONSOLE_LOG = 271,
+    FLOAT = 272,
+    TRUE = 273,
+    FALSE = 274,
+    BOOLEAN = 275,
+    ANY_TYPE = 276,
+    NUMBER_TYPE = 277,
+    STRING_TYPE = 278,
+    BOOLEAN_TYPE = 279,
+    RETURN = 280,
+    FUNCTION = 281,
+    ERROR_LITERAL = 282,
+    EQ = 283,
+    COLON = 284,
+    LBRACKET = 285,
+    RBRACKET = 286,
+    LBRACE = 287,
+    RBRACE = 288,
+    LPARENTHESES = 289,
+    RPARENTHESES = 290,
+    COMMA = 291,
+    MINUS = 292,
+    DOT = 293,
+    MULT = 294,
+    EXP = 295,
+    GT = 296,
+    LT = 297,
+    DOLLAR = 298
   };
 #endif
 
@@ -92,13 +94,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 8 "parser.y" /* yacc.c:1909  */
+#line 27 "parser.y" /* yacc.c:1909  */
 
-    int yint;
+    char * ystr;
+    int   yint;
     float yfloat;
-    char *ystr;
 
-#line 102 "parser.tab.h" /* yacc.c:1909  */
+#line 104 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

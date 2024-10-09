@@ -1,0 +1,56 @@
+let w = 100;
+let x = 200;
+let nome = "João"
+let verdade = true;
+let f = 1.5;
+
+var s = 10;
+var t = 'murillo';
+var e = 1.2
+var falso = false;
+
+const g = 7;
+const h = 'medeiros';
+const i = 3.4;
+
+let add = w + x;
+let sub = w - x;
+let mult = w * x;
+let div = w / x;
+console.log(add);
+console.log(sub);
+console.log(mult);
+console.log(div);
+
+var da = w * (x + 1);
+
+console.log("O resultado da adição é: " + da);
+
+
+function somar(a, b) {
+    return a + b;
+}
+
+let resultado = somar(5, 3);
+
+console.log("O resultado da soma é: " + resultado);
+
+let arr = [1, 2, 3];
+
+function pessoa(nome, sobrenome) {
+    return nome + " " + sobrenome;
+}
+
+let nome_completo = pessoa("Murillo", "Medeiros");
+
+function animal(nome, idade) {
+    return `O ${nome} tem ${idade} anos.`;
+}
+
+let animal_info = animal("Cachorro", 5);
+
+console.log(animal_info);
+
+function erro(){
+    return "Erro";
+}

@@ -1,32 +1,54 @@
 %{
     #include <stdio.h>
+    #include <stdlib.h>
     #include <string.h>
+    //#define AddVAR(n,t) SymTab=MakeVAR(n,t,SymTab)
+    #define CHECKIFVARISDECLARED(x) {\
+                VAR * node=FindVAR(x);\
+                if ( node == NULL )\
+                   AddVAR(x,current_type);\
+                else {\
+                   printf("Variável %s já declarada na  linha %d\n",x,yylineno);\
+                   semanticerror =1 ;\
+                }\
+               }
     extern int yylineno;
     extern char *yytext;
     void yyerror(const char *s);
+    int yylex(void);
+    int semanticerror = 0;
+
+    //extern VAR *SymTab;           
+    FILE *output;
+
 %}
+
+%define parse.error verbose //aparecer mais detalhes dos erros
 %union {
-    int yint;
+    char * ystr;
+    int   yint;
     float yfloat;
-    char *ystr;
 }
-%start begin
-%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE
-%token IDENTIFIER CLASS_IDENTIFIER
-%token <yint> NUMBER
-%token <yfloat> FLOAT
+
+
+%token <ystr> IDENTIFIER
 %token <ystr> STRING
-%token TRUE FALSE CONSOLE_LOG VAR CONST RETURN FUNCTION
-%token LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA
-%token SINGLE_QUOTE ADD MINUS DOT DOUBLE_QUOTE MULT DIV EXP GT LT
-%token EQ BACKTICK DOLLAR
+%token <yint> NUMBER
+%token LET VAR CONST ASSIGN SEMICOLON DOUBLE_QUOTE SINGLE_QUOTE CRASIS_QUOTE
+%token LPAREN RPAREN
+%token CONSOLE_LOG
+%token FLOAT TRUE FALSE BOOLEAN ANY_TYPE
+%token NUMBER_TYPE STRING_TYPE BOOLEAN_TYPE RETURN FUNCTION ERROR_LITERAL
+%token EQ COLON LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA MINUS DOT MULT EXP GT LT DOLLAR
 %left '-' '+'
 %left '*' '/'
 %right '^'
-%left '>' '<' '='
+
+%type <ystr> expression
 
 %%
-begin : 
+
+program:
     statements
 ;
 
@@ -35,104 +57,85 @@ statements:
     | /* empty */
 ;
 
-statement:
-    variable_declaration
-    | function_declaration
-    | function_call
+ statement:
+    variable_declaration_expression { fprintf(output, ";"); }
+    | variable_declaration_expression SEMICOLON { fprintf(output, ";"); }
     | console_log
     | expression_statement
-    | return_statement
+;   
+
+expression_statement:
+    expression SEMICOLON {
+        fprintf(output, "%s", $1);
+    }
+    | expression {
+        fprintf(output, "%s", $1);
+    }
+;
+
+variable_declaration_expression:
+    variable_declaration expression {
+        fprintf(output, "%s", $2);
+    }
 ;
 
 variable_declaration:
-    LET IDENTIFIER ASSIGN expression SEMICOLON
-    | VAR IDENTIFIER ASSIGN expression SEMICOLON
-    | CONST IDENTIFIER ASSIGN expression SEMICOLON
-    | LET IDENTIFIER ASSIGN expression
-    | VAR IDENTIFIER ASSIGN expression
-    | CONST IDENTIFIER ASSIGN expression
-;
-
-function_declaration:
-    FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
-;
-
-parameter_list:
-    IDENTIFIER
-    | IDENTIFIER COMMA parameter_list
-    | /* empty */
-;
-
-function_call:
-    IDENTIFIER LPARENTHESES argument_list RPARENTHESES SEMICOLON
-    | IDENTIFIER LPARENTHESES argument_list RPARENTHESES
-;
-
-argument_list:
-    expression
-    | expression COMMA argument_list
-    | /* empty */
+    LET IDENTIFIER ASSIGN {
+        fprintf(output, "let %s: number = ", $2);
+    } expression
+    | VAR IDENTIFIER ASSIGN{
+        fprintf(output, "var %s: number = ", $2);
+    } expression
+    | CONST IDENTIFIER ASSIGN{
+        fprintf(output, "const %s: number = ", $2);
+    } expression
 ;
 
 console_log:
-    CONSOLE_LOG LPARENTHESES expression RPARENTHESES SEMICOLON
-;
-
-expression_statement:
-    expression SEMICOLON
-;
-
-return_statement:
-    RETURN expression SEMICOLON
-    | RETURN expression
+    CONSOLE_LOG LPAREN expression RPAREN { fprintf(output, "console.log(%s)", $3); }
 ;
 
 expression:
-    NUMBER
-    | FLOAT
-    | STRING
-    | TRUE
-    | FALSE
-    | IDENTIFIER
-    | array
-    | function_call
-    | expression ADD expression
-    | expression MINUS expression
-    | expression MULT expression
-    | expression DIV expression
-    | LPARENTHESES expression RPARENTHESES
-    | BACKTICK interpolated_expression BACKTICK
-;
-
-interpolated_expression:
-    interpolated_part
-    | interpolated_expression interpolated_part
-;
-
-interpolated_part:
-    STRING
-    | DOLLAR LBRACE expression RBRACE
-;
-
-array:
-    LBRACKET array_elements RBRACKET
-;
-
-array_elements:
-    expression
-    | expression COMMA array_elements
+    NUMBER { $$ = strdup(yytext); }
+    | IDENTIFIER { $$ = strdup(yytext); }
+    | STRING { $$ = strdup(yytext); }
+    | expression '+' expression { 
+                                    char *result = malloc(strlen($1) + strlen($3) + 4);
+                                    sprintf(result, "%s + %s", $1, $3);
+                                    $$ = result;
+                                }
+    | expression '-' expression { 
+                                    char *result = malloc(strlen($1) + strlen($3) + 4);
+                                    sprintf(result, "%s - %s", $1, $3);
+                                    $$ = result;
+                                }
+    | expression '*' expression { 
+                                    char *result = malloc(strlen($1) + strlen($3) + 4);
+                                    sprintf(result, "%s * %s", $1, $3);
+                                    $$ = result;
+                                }
+    | expression '/' expression { 
+                                    char *result = malloc(strlen($1) + strlen($3) + 4);
+                                    sprintf(result, "%s / %s", $1, $3);
+                                    $$ = result;
+                                }
 ;
 
 %%
-int main(int argc, char *argv[])
-{
-    if (yyparse() == 0) {
-        printf("codigo sem erros\n");
+
+int main(int argc, char *argv[]) {
+    output = fopen("output.ts", "w");
+    if (!output) {
+        fprintf(stderr, "Erro ao abrir o arquivo de saída.\n");
+        return 1;
     }
+    if (yyparse() == 0 && semanticerror == 0) {
+        printf("Código sem erros\n");
+    }
+    fclose(output);
     return 0;
 }
 
-void yyerror(const char *s) /* Called by yyparse on error */
-{
-    printf("Erro de sintaxe: %s na linha %d, token: %s\n", s, yylineno, yytext);
+void yyerror(const char *s) {
+    printf("%s na linha %d\n", s, yylineno);
 }
