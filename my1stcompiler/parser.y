@@ -82,13 +82,13 @@ variable_declaration_expression:
 variable_declaration:
     LET IDENTIFIER ASSIGN {
         fprintf(output, "let %s: number = ", $2);
-    } expression
+    }
     | VAR IDENTIFIER ASSIGN{
         fprintf(output, "var %s: number = ", $2);
-    } expression
+    }
     | CONST IDENTIFIER ASSIGN{
         fprintf(output, "const %s: number = ", $2);
-    } expression
+    }
 ;
 
 console_log:
