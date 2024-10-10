@@ -2,7 +2,6 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
-    //#define AddVAR(n,t) SymTab=MakeVAR(n,t,SymTab)
     #define CHECKIFVARISDECLARED(x) {\
                 VAR * node=FindVAR(x);\
                 if ( node == NULL )\
@@ -18,28 +17,26 @@
     int yylex(void);
     int semanticerror = 0;
 
-    //extern VAR *SymTab;           
     FILE *output;
 
 %}
 
-%define parse.error verbose //aparecer mais detalhes dos erros
+%define parse.error verbose
 %union {
     char * ystr;
     int   yint;
     float yfloat;
 }
 
-
 %token <ystr> IDENTIFIER
 %token <ystr> STRING
 %token <yint> NUMBER
-%token LET VAR CONST ASSIGN SEMICOLON DOUBLE_QUOTE SINGLE_QUOTE CRASIS_QUOTE
+%token LET VAR CONST ASSIGN SEMICOLON
 %token LPAREN RPAREN
 %token CONSOLE_LOG
-%token FLOAT TRUE FALSE BOOLEAN ANY_TYPE
-%token NUMBER_TYPE STRING_TYPE BOOLEAN_TYPE RETURN FUNCTION ERROR_LITERAL
-%token EQ COLON LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA MINUS DOT MULT EXP GT LT DOLLAR
+%token FLOAT
+%token BOOLEAN ERROR_LITERAL NUMBER_TYPE STRING_TYPE BOOLEAN_TYPE ANY_TYPE RETURN FUNCTION
+%token EQ COLON LBRACKET RBRACKET LBRACE RBRACE COMMA DOT EXP GT LT DOUBLE_QUOTE SINGLE_QUOTE CRASIS_QUOTE DOLLAR
 %left '-' '+'
 %left '*' '/'
 %right '^'
@@ -58,15 +55,15 @@ statements:
     | /* empty */
 ;
 
- statement:
-    variable_declaration SEMICOLON
-    | console_log
+statement:
+    variable_declaration SEMICOLON { fprintf(output, ";"); }
+    | console_log SEMICOLON
     | expression_statement
 ;   
 
 expression_statement:
     expression SEMICOLON {
-        fprintf(output, "%s", $1);
+        fprintf(output, "%s;", $1);
     }
     | expression {
         fprintf(output, "%s", $1);
@@ -76,23 +73,23 @@ expression_statement:
 variable_declaration:
     LET IDENTIFIER ASSIGN expression {
         if (is_number($4)) {
-            fprintf(output, "let %s: number = %s;\n", $2, $4);
+            fprintf(output, "let %s: number = %s", $2, $4);
         } else if (is_string($4)) {
-            fprintf(output, "let %s: string = %s;\n", $2, $4);
+            fprintf(output, "let %s: string = %s", $2, $4);
         }
     }
     | VAR IDENTIFIER ASSIGN expression {
         if (is_number($4)) {
-            fprintf(output, "var %s: number = %s;\n", $2, $4);
+            fprintf(output, "var %s: number = %s", $2, $4);
         } else if (is_string($4)) {
-            fprintf(output, "var %s: string = %s;\n", $2, $4);
+            fprintf(output, "var %s: string = %s", $2, $4);
         }
     }
     | CONST IDENTIFIER ASSIGN expression {
         if (is_number($4)) {
-            fprintf(output, "const %s: number = %s;\n", $2, $4);
+            fprintf(output, "const %s: number = %s", $2, $4);
         } else if (is_string($4)) {
-            fprintf(output, "const %s: string = %s;\n", $2, $4);
+            fprintf(output, "const %s: string = %s", $2, $4);
         }
     }
 ;
@@ -127,7 +124,6 @@ expression:
                                     $$ = result;
                                 }
 ;
-
 
 %%
 

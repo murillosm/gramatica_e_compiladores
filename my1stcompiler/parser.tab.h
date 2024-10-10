@@ -53,39 +53,33 @@ extern int yydebug;
     CONST = 263,
     ASSIGN = 264,
     SEMICOLON = 265,
-    DOUBLE_QUOTE = 266,
-    SINGLE_QUOTE = 267,
-    CRASIS_QUOTE = 268,
-    LPAREN = 269,
-    RPAREN = 270,
-    CONSOLE_LOG = 271,
-    FLOAT = 272,
-    TRUE = 273,
-    FALSE = 274,
-    BOOLEAN = 275,
-    ANY_TYPE = 276,
-    NUMBER_TYPE = 277,
-    STRING_TYPE = 278,
-    BOOLEAN_TYPE = 279,
-    RETURN = 280,
-    FUNCTION = 281,
-    ERROR_LITERAL = 282,
-    EQ = 283,
-    COLON = 284,
-    LBRACKET = 285,
-    RBRACKET = 286,
-    LBRACE = 287,
-    RBRACE = 288,
-    LPARENTHESES = 289,
-    RPARENTHESES = 290,
-    COMMA = 291,
-    MINUS = 292,
-    DOT = 293,
-    MULT = 294,
-    EXP = 295,
-    GT = 296,
-    LT = 297,
-    DOLLAR = 298
+    LPAREN = 266,
+    RPAREN = 267,
+    CONSOLE_LOG = 268,
+    FLOAT = 269,
+    BOOLEAN = 270,
+    ERROR_LITERAL = 271,
+    NUMBER_TYPE = 272,
+    STRING_TYPE = 273,
+    BOOLEAN_TYPE = 274,
+    ANY_TYPE = 275,
+    RETURN = 276,
+    FUNCTION = 277,
+    EQ = 278,
+    COLON = 279,
+    LBRACKET = 280,
+    RBRACKET = 281,
+    LBRACE = 282,
+    RBRACE = 283,
+    COMMA = 284,
+    DOT = 285,
+    EXP = 286,
+    GT = 287,
+    LT = 288,
+    DOUBLE_QUOTE = 289,
+    SINGLE_QUOTE = 290,
+    CRASIS_QUOTE = 291,
+    DOLLAR = 292
   };
 #endif
 
@@ -94,13 +88,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 27 "parser.y" /* yacc.c:1909  */
+#line 25 "parser.y" /* yacc.c:1909  */
 
     char * ystr;
     int   yint;
     float yfloat;
 
-#line 104 "parser.tab.h" /* yacc.c:1909  */
+#line 98 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
