@@ -1,5 +1,5 @@
-
 let w = 100;
+let nome = "João";
 let x = 200;
 
 let z = w + x;

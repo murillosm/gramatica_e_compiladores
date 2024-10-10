@@ -3,7 +3,6 @@ Terminals unused in grammar
    DOUBLE_QUOTE
    SINGLE_QUOTE
    CRASIS_QUOTE
-   FLOAT
    TRUE
    FALSE
    BOOLEAN
@@ -42,55 +41,53 @@ Grammar
     2 statements: statement statements
     3           | %empty
 
-    4 statement: variable_declaration_expression
-    5          | variable_declaration_expression SEMICOLON
-    6          | console_log
-    7          | expression_statement
+    4 statement: variable_declaration SEMICOLON
+    5          | console_log
+    6          | expression_statement
 
-    8 expression_statement: expression SEMICOLON
-    9                     | expression
+    7 expression_statement: expression SEMICOLON
+    8                     | expression
 
-   10 variable_declaration_expression: variable_declaration expression
+    9 variable_declaration: LET IDENTIFIER ASSIGN expression
+   10                     | VAR IDENTIFIER ASSIGN expression
+   11                     | CONST IDENTIFIER ASSIGN expression
 
-   11 variable_declaration: LET IDENTIFIER ASSIGN
-   12                     | VAR IDENTIFIER ASSIGN
-   13                     | CONST IDENTIFIER ASSIGN
+   12 console_log: CONSOLE_LOG LPAREN expression RPAREN
 
-   14 console_log: CONSOLE_LOG LPAREN expression RPAREN
-
-   15 expression: NUMBER
-   16           | IDENTIFIER
-   17           | STRING
-   18           | expression '+' expression
-   19           | expression '-' expression
-   20           | expression '*' expression
-   21           | expression '/' expression
+   13 expression: NUMBER
+   14           | FLOAT
+   15           | IDENTIFIER
+   16           | STRING
+   17           | expression '+' expression
+   18           | expression '-' expression
+   19           | expression '*' expression
+   20           | expression '/' expression
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'*' (42) 20
-'+' (43) 18
-'-' (45) 19
-'/' (47) 21
+'*' (42) 19
+'+' (43) 17
+'-' (45) 18
+'/' (47) 20
 '^' (94)
 error (256)
-IDENTIFIER (258) 11 12 13 16
-STRING (259) 17
-NUMBER (260) 15
-LET (261) 11
-VAR (262) 12
-CONST (263) 13
-ASSIGN (264) 11 12 13
-SEMICOLON (265) 5 8
+IDENTIFIER (258) 9 10 11 15
+STRING (259) 16
+NUMBER (260) 13
+LET (261) 9
+VAR (262) 10
+CONST (263) 11
+ASSIGN (264) 9 10 11
+SEMICOLON (265) 4 7
 DOUBLE_QUOTE (266)
 SINGLE_QUOTE (267)
 CRASIS_QUOTE (268)
-LPAREN (269) 14
-RPAREN (270) 14
-CONSOLE_LOG (271) 14
-FLOAT (272)
+LPAREN (269) 12
+RPAREN (270) 12
+CONSOLE_LOG (271) 12
+FLOAT (272) 14
 TRUE (273)
 FALSE (274)
 BOOLEAN (275)
@@ -128,17 +125,16 @@ program (50)
 statements (51)
     on left: 2 3, on right: 1 2
 statement (52)
-    on left: 4 5 6 7, on right: 2
+    on left: 4 5 6, on right: 2
 expression_statement (53)
-    on left: 8 9, on right: 7
-variable_declaration_expression (54)
-    on left: 10, on right: 4 5
-variable_declaration (55)
-    on left: 11 12 13, on right: 10
-console_log (56)
-    on left: 14, on right: 6
-expression (57)
-    on left: 15 16 17 18 19 20 21, on right: 8 9 10 14 18 19 20 21
+    on left: 7 8, on right: 6
+variable_declaration (54)
+    on left: 9 10 11, on right: 4
+console_log (55)
+    on left: 12, on right: 5
+expression (56)
+    on left: 13 14 15 16 17 18 19 20, on right: 7 8 9 10 11 12 17 18
+    19 20
 
 
 State 0
@@ -152,83 +148,90 @@ State 0
     VAR          shift, and go to state 5
     CONST        shift, and go to state 6
     CONSOLE_LOG  shift, and go to state 7
+    FLOAT        shift, and go to state 8
 
     $default  reduce using rule 3 (statements)
 
-    program                          go to state 8
-    statements                       go to state 9
-    statement                        go to state 10
-    expression_statement             go to state 11
-    variable_declaration_expression  go to state 12
-    variable_declaration             go to state 13
-    console_log                      go to state 14
-    expression                       go to state 15
+    program               go to state 9
+    statements            go to state 10
+    statement             go to state 11
+    expression_statement  go to state 12
+    variable_declaration  go to state 13
+    console_log           go to state 14
+    expression            go to state 15
 
 
 State 1
 
-   16 expression: IDENTIFIER .
-
-    $default  reduce using rule 16 (expression)
-
-
-State 2
-
-   17 expression: STRING .
-
-    $default  reduce using rule 17 (expression)
-
-
-State 3
-
-   15 expression: NUMBER .
+   15 expression: IDENTIFIER .
 
     $default  reduce using rule 15 (expression)
 
 
+State 2
+
+   16 expression: STRING .
+
+    $default  reduce using rule 16 (expression)
+
+
+State 3
+
+   13 expression: NUMBER .
+
+    $default  reduce using rule 13 (expression)
+
+
 State 4
 
-   11 variable_declaration: LET . IDENTIFIER ASSIGN
+    9 variable_declaration: LET . IDENTIFIER ASSIGN expression
 
     IDENTIFIER  shift, and go to state 16
 
 
 State 5
 
-   12 variable_declaration: VAR . IDENTIFIER ASSIGN
+   10 variable_declaration: VAR . IDENTIFIER ASSIGN expression
 
     IDENTIFIER  shift, and go to state 17
 
 
 State 6
 
-   13 variable_declaration: CONST . IDENTIFIER ASSIGN
+   11 variable_declaration: CONST . IDENTIFIER ASSIGN expression
 
     IDENTIFIER  shift, and go to state 18
 
 
 State 7
 
-   14 console_log: CONSOLE_LOG . LPAREN expression RPAREN
+   12 console_log: CONSOLE_LOG . LPAREN expression RPAREN
 
     LPAREN  shift, and go to state 19
 
 
 State 8
 
+   14 expression: FLOAT .
+
+    $default  reduce using rule 14 (expression)
+
+
+State 9
+
     0 $accept: program . $end
 
     $end  shift, and go to state 20
 
 
-State 9
+State 10
 
     1 program: statements .
 
     $default  reduce using rule 1 (program)
 
 
-State 10
+State 11
 
     2 statements: statement . statements
 
@@ -239,101 +242,88 @@ State 10
     VAR          shift, and go to state 5
     CONST        shift, and go to state 6
     CONSOLE_LOG  shift, and go to state 7
+    FLOAT        shift, and go to state 8
 
     $default  reduce using rule 3 (statements)
 
-    statements                       go to state 21
-    statement                        go to state 10
-    expression_statement             go to state 11
-    variable_declaration_expression  go to state 12
-    variable_declaration             go to state 13
-    console_log                      go to state 14
-    expression                       go to state 15
-
-
-State 11
-
-    7 statement: expression_statement .
-
-    $default  reduce using rule 7 (statement)
+    statements            go to state 21
+    statement             go to state 11
+    expression_statement  go to state 12
+    variable_declaration  go to state 13
+    console_log           go to state 14
+    expression            go to state 15
 
 
 State 12
 
-    4 statement: variable_declaration_expression .
-    5          | variable_declaration_expression . SEMICOLON
-
-    SEMICOLON  shift, and go to state 22
-
-    $default  reduce using rule 4 (statement)
-
-
-State 13
-
-   10 variable_declaration_expression: variable_declaration . expression
-
-    IDENTIFIER  shift, and go to state 1
-    STRING      shift, and go to state 2
-    NUMBER      shift, and go to state 3
-
-    expression  go to state 23
-
-
-State 14
-
-    6 statement: console_log .
+    6 statement: expression_statement .
 
     $default  reduce using rule 6 (statement)
 
 
+State 13
+
+    4 statement: variable_declaration . SEMICOLON
+
+    SEMICOLON  shift, and go to state 22
+
+
+State 14
+
+    5 statement: console_log .
+
+    $default  reduce using rule 5 (statement)
+
+
 State 15
 
-    8 expression_statement: expression . SEMICOLON
-    9                     | expression .
-   18 expression: expression . '+' expression
-   19           | expression . '-' expression
-   20           | expression . '*' expression
-   21           | expression . '/' expression
+    7 expression_statement: expression . SEMICOLON
+    8                     | expression .
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
 
-    SEMICOLON  shift, and go to state 24
-    '-'        shift, and go to state 25
-    '+'        shift, and go to state 26
-    '*'        shift, and go to state 27
-    '/'        shift, and go to state 28
+    SEMICOLON  shift, and go to state 23
+    '-'        shift, and go to state 24
+    '+'        shift, and go to state 25
+    '*'        shift, and go to state 26
+    '/'        shift, and go to state 27
 
-    $default  reduce using rule 9 (expression_statement)
+    $default  reduce using rule 8 (expression_statement)
 
 
 State 16
 
-   11 variable_declaration: LET IDENTIFIER . ASSIGN
+    9 variable_declaration: LET IDENTIFIER . ASSIGN expression
 
-    ASSIGN  shift, and go to state 29
+    ASSIGN  shift, and go to state 28
 
 
 State 17
 
-   12 variable_declaration: VAR IDENTIFIER . ASSIGN
+   10 variable_declaration: VAR IDENTIFIER . ASSIGN expression
 
-    ASSIGN  shift, and go to state 30
+    ASSIGN  shift, and go to state 29
 
 
 State 18
 
-   13 variable_declaration: CONST IDENTIFIER . ASSIGN
+   11 variable_declaration: CONST IDENTIFIER . ASSIGN expression
 
-    ASSIGN  shift, and go to state 31
+    ASSIGN  shift, and go to state 30
 
 
 State 19
 
-   14 console_log: CONSOLE_LOG LPAREN . expression RPAREN
+   12 console_log: CONSOLE_LOG LPAREN . expression RPAREN
 
     IDENTIFIER  shift, and go to state 1
     STRING      shift, and go to state 2
     NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
 
-    expression  go to state 32
+    expression  go to state 31
 
 
 State 20
@@ -352,166 +342,217 @@ State 21
 
 State 22
 
-    5 statement: variable_declaration_expression SEMICOLON .
+    4 statement: variable_declaration SEMICOLON .
 
-    $default  reduce using rule 5 (statement)
+    $default  reduce using rule 4 (statement)
 
 
 State 23
 
-   10 variable_declaration_expression: variable_declaration expression .
-   18 expression: expression . '+' expression
-   19           | expression . '-' expression
-   20           | expression . '*' expression
-   21           | expression . '/' expression
+    7 expression_statement: expression SEMICOLON .
 
-    '-'  shift, and go to state 25
-    '+'  shift, and go to state 26
-    '*'  shift, and go to state 27
-    '/'  shift, and go to state 28
-
-    $default  reduce using rule 10 (variable_declaration_expression)
+    $default  reduce using rule 7 (expression_statement)
 
 
 State 24
 
-    8 expression_statement: expression SEMICOLON .
-
-    $default  reduce using rule 8 (expression_statement)
-
-
-State 25
-
-   19 expression: expression '-' . expression
+   18 expression: expression '-' . expression
 
     IDENTIFIER  shift, and go to state 1
     STRING      shift, and go to state 2
     NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
+
+    expression  go to state 32
+
+
+State 25
+
+   17 expression: expression '+' . expression
+
+    IDENTIFIER  shift, and go to state 1
+    STRING      shift, and go to state 2
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
 
     expression  go to state 33
 
 
 State 26
 
-   18 expression: expression '+' . expression
+   19 expression: expression '*' . expression
 
     IDENTIFIER  shift, and go to state 1
     STRING      shift, and go to state 2
     NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
 
     expression  go to state 34
 
 
 State 27
 
-   20 expression: expression '*' . expression
+   20 expression: expression '/' . expression
 
     IDENTIFIER  shift, and go to state 1
     STRING      shift, and go to state 2
     NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
 
     expression  go to state 35
 
 
 State 28
 
-   21 expression: expression '/' . expression
+    9 variable_declaration: LET IDENTIFIER ASSIGN . expression
 
     IDENTIFIER  shift, and go to state 1
     STRING      shift, and go to state 2
     NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
 
     expression  go to state 36
 
 
 State 29
 
-   11 variable_declaration: LET IDENTIFIER ASSIGN .
+   10 variable_declaration: VAR IDENTIFIER ASSIGN . expression
 
-    $default  reduce using rule 11 (variable_declaration)
+    IDENTIFIER  shift, and go to state 1
+    STRING      shift, and go to state 2
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
+
+    expression  go to state 37
 
 
 State 30
 
-   12 variable_declaration: VAR IDENTIFIER ASSIGN .
+   11 variable_declaration: CONST IDENTIFIER ASSIGN . expression
 
-    $default  reduce using rule 12 (variable_declaration)
+    IDENTIFIER  shift, and go to state 1
+    STRING      shift, and go to state 2
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 8
+
+    expression  go to state 38
 
 
 State 31
 
-   13 variable_declaration: CONST IDENTIFIER ASSIGN .
+   12 console_log: CONSOLE_LOG LPAREN expression . RPAREN
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
 
-    $default  reduce using rule 13 (variable_declaration)
+    RPAREN  shift, and go to state 39
+    '-'     shift, and go to state 24
+    '+'     shift, and go to state 25
+    '*'     shift, and go to state 26
+    '/'     shift, and go to state 27
 
 
 State 32
 
-   14 console_log: CONSOLE_LOG LPAREN expression . RPAREN
-   18 expression: expression . '+' expression
-   19           | expression . '-' expression
-   20           | expression . '*' expression
-   21           | expression . '/' expression
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   18           | expression '-' expression .
+   19           | expression . '*' expression
+   20           | expression . '/' expression
 
-    RPAREN  shift, and go to state 37
-    '-'     shift, and go to state 25
-    '+'     shift, and go to state 26
-    '*'     shift, and go to state 27
-    '/'     shift, and go to state 28
-
-
-State 33
-
-   18 expression: expression . '+' expression
-   19           | expression . '-' expression
-   19           | expression '-' expression .
-   20           | expression . '*' expression
-   21           | expression . '/' expression
-
-    '*'  shift, and go to state 27
-    '/'  shift, and go to state 28
-
-    $default  reduce using rule 19 (expression)
-
-
-State 34
-
-   18 expression: expression . '+' expression
-   18           | expression '+' expression .
-   19           | expression . '-' expression
-   20           | expression . '*' expression
-   21           | expression . '/' expression
-
-    '*'  shift, and go to state 27
-    '/'  shift, and go to state 28
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
 
     $default  reduce using rule 18 (expression)
 
 
+State 33
+
+   17 expression: expression . '+' expression
+   17           | expression '+' expression .
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
+
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 17 (expression)
+
+
+State 34
+
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   19           | expression '*' expression .
+   20           | expression . '/' expression
+
+    $default  reduce using rule 19 (expression)
+
+
 State 35
 
-   18 expression: expression . '+' expression
-   19           | expression . '-' expression
-   20           | expression . '*' expression
-   20           | expression '*' expression .
-   21           | expression . '/' expression
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
+   20           | expression '/' expression .
 
     $default  reduce using rule 20 (expression)
 
 
 State 36
 
-   18 expression: expression . '+' expression
-   19           | expression . '-' expression
-   20           | expression . '*' expression
-   21           | expression . '/' expression
-   21           | expression '/' expression .
+    9 variable_declaration: LET IDENTIFIER ASSIGN expression .
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
 
-    $default  reduce using rule 21 (expression)
+    '-'  shift, and go to state 24
+    '+'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 9 (variable_declaration)
 
 
 State 37
 
-   14 console_log: CONSOLE_LOG LPAREN expression RPAREN .
+   10 variable_declaration: VAR IDENTIFIER ASSIGN expression .
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
 
-    $default  reduce using rule 14 (console_log)
+    '-'  shift, and go to state 24
+    '+'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 10 (variable_declaration)
+
+
+State 38
+
+   11 variable_declaration: CONST IDENTIFIER ASSIGN expression .
+   17 expression: expression . '+' expression
+   18           | expression . '-' expression
+   19           | expression . '*' expression
+   20           | expression . '/' expression
+
+    '-'  shift, and go to state 24
+    '+'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 11 (variable_declaration)
+
+
+State 39
+
+   12 console_log: CONSOLE_LOG LPAREN expression RPAREN .
+
+    $default  reduce using rule 12 (console_log)

@@ -45,6 +45,7 @@
 %right '^'
 
 %type <ystr> expression
+%type <ystr> variable_declaration
 
 %%
 
@@ -58,8 +59,7 @@ statements:
 ;
 
  statement:
-    variable_declaration_expression { fprintf(output, ";"); }
-    | variable_declaration_expression SEMICOLON { fprintf(output, ";"); }
+    variable_declaration SEMICOLON
     | console_log
     | expression_statement
 ;   
@@ -73,21 +73,27 @@ expression_statement:
     }
 ;
 
-variable_declaration_expression:
-    variable_declaration expression {
-        fprintf(output, "%s", $2);
-    }
-;
-
 variable_declaration:
-    LET IDENTIFIER ASSIGN {
-        fprintf(output, "let %s: number = ", $2);
+    LET IDENTIFIER ASSIGN expression {
+        if (is_number($4)) {
+            fprintf(output, "let %s: number = %s;\n", $2, $4);
+        } else if (is_string($4)) {
+            fprintf(output, "let %s: string = %s;\n", $2, $4);
+        }
     }
-    | VAR IDENTIFIER ASSIGN{
-        fprintf(output, "var %s: number = ", $2);
+    | VAR IDENTIFIER ASSIGN expression {
+        if (is_number($4)) {
+            fprintf(output, "var %s: number = %s;\n", $2, $4);
+        } else if (is_string($4)) {
+            fprintf(output, "var %s: string = %s;\n", $2, $4);
+        }
     }
-    | CONST IDENTIFIER ASSIGN{
-        fprintf(output, "const %s: number = ", $2);
+    | CONST IDENTIFIER ASSIGN expression {
+        if (is_number($4)) {
+            fprintf(output, "const %s: number = %s;\n", $2, $4);
+        } else if (is_string($4)) {
+            fprintf(output, "const %s: string = %s;\n", $2, $4);
+        }
     }
 ;
 
@@ -97,6 +103,7 @@ console_log:
 
 expression:
     NUMBER { $$ = strdup(yytext); }
+    | FLOAT { $$ = strdup(yytext); }
     | IDENTIFIER { $$ = strdup(yytext); }
     | STRING { $$ = strdup(yytext); }
     | expression '+' expression { 
@@ -121,6 +128,7 @@ expression:
                                 }
 ;
 
+
 %%
 
 int main(int argc, char *argv[]) {
@@ -138,4 +146,24 @@ int main(int argc, char *argv[]) {
 
 void yyerror(const char *s) {
     printf("%s na linha %d\n", s, yylineno);
+}
+
+int is_number(const char* value) {
+    int i;
+    for (i = 0; i < strlen(value); i++) {
+        if (!isdigit(value[i])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
+int is_string(const char* value) {
+    // Verifica se começa e termina com aspas simples ou duplas
+    if ((value[0] == '"' && value[strlen(value)-1] == '"') ||
+        (value[0] == '\'' && value[strlen(value)-1] == '\'')) {
+        return 1;
+    }
+    return 0;
 }
