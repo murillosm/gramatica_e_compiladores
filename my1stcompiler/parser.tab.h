@@ -46,22 +46,54 @@ extern int yydebug;
   enum yytokentype
   {
     LET = 258,
-    INTEGER = 259,
-    IN = 260,
-    SKIP = 261,
-    IF = 262,
-    FI = 263,
-    THEN = 264,
-    ELSE = 265,
-    END = 266,
-    WHILE = 267,
-    DO = 268,
-    READ = 269,
-    WRITE = 270,
-    ATRIB = 271,
-    NUMERO = 272,
-    REAL = 273,
-    ID = 274
+    COLON = 259,
+    NUMBER_TYPE = 260,
+    STRING_TYPE = 261,
+    ASSIGN = 262,
+    SEMICOLON = 263,
+    BOOLEAN_TYPE = 264,
+    CLASS_IDENTIFIER = 265,
+    NUMBER = 266,
+    FLOAT = 267,
+    STRING = 268,
+    IDENTIFIER = 269,
+    TRUE = 270,
+    FALSE = 271,
+    CONSOLE_LOG = 272,
+    VAR = 273,
+    CONST = 274,
+    RETURN = 275,
+    FUNCTION = 276,
+    LBRACKET = 277,
+    RBRACKET = 278,
+    LBRACE = 279,
+    RBRACE = 280,
+    LPARENTHESES = 281,
+    RPARENTHESES = 282,
+    COMMA = 283,
+    SINGLE_QUOTE = 284,
+    ADD = 285,
+    MINUS = 286,
+    DOT = 287,
+    DOUBLE_QUOTE = 288,
+    MULT = 289,
+    DIV = 290,
+    EXP = 291,
+    GT = 292,
+    LT = 293,
+    EQ = 294,
+    BACKTICK = 295,
+    DOLLAR = 296,
+    REAL = 297,
+    NUMERO = 298,
+    BOOLEAN = 299,
+    ERROR_LITERAL = 300,
+    ANY_TYPE = 301,
+    SUB = 302,
+    MUL = 303,
+    LPAREN = 304,
+    RPAREN = 305,
+    CRASIS_QUOTE = 306
   };
 #endif
 
@@ -70,13 +102,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 28 "parser.y" /* yacc.c:1909  */
+#line 31 "parser.y" /* yacc.c:1909  */
 
-    char * ystr;
-    int   yint;
+    int yint;
     float yfloat;
+    char *ystr;
 
-#line 80 "parser.tab.h" /* yacc.c:1909  */
+#line 112 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -8,24 +8,9 @@
 static char *strings;
 static char *strp;
 static int strsize = 0;
+int g_scope = 0;
 //char *calloc(int,int);
-VAR *SymTab = NULL;
 
-VAR *MakeVAR(char *name, int type, VAR *next) {
-	VAR *p;
-	p = NEW(VAR);
-	p->name = name;
-	p->type = type;
-	p->next = next;
-	return p;
-}
-
-VAR *FindVAR (char *name) {
-	VAR *p = SymTab;
-	/* Note name comparision depends on name being in stringpool! */
-	while ((p != NULL)&&(p->name != name)) p = p->next;
-	return p;
-}
 
 /* Simple string table manager for use with symbol table */
 void init_stringpool(int strs) {

@@ -1,117 +1,93 @@
 %{
     #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
     #include <ctype.h>
+    #include <stdbool.h>
     #include "sym.h"
-    #define AddVAR(n,t) SymTab=MakeVAR(n,t,SymTab)
     #define ASSERT(x,y) if(!(x)) printf("%s na  linha %d\n",(y),yylineno)
-    #define CHECKIFVARISDECLARED(x) {\
-                VAR * node=FindVAR(x);\
-                if ( node == NULL )\
-                   AddVAR(x,current_type);\
-                else {\
-                   printf("Variável %s já declarada na  linha %d\n",x,yylineno);\
-                   semanticerror =1 ;\
-                }\
-               }
-
-    #define UNDECL  0
-    #define INT     1
-    #define BOOL    2
-    #define FLT     3
-    int current_type=UNDECL;
-    int semanticerror= 0;
     extern int yylineno;
-    extern VAR *SymTab;
     FILE * output;
+
+    char identifierDefined[100];
+
+    char* remove_quotes(const char* str) {
+        int len = strlen(str);
+        char* result = (char*)malloc(len + 1);
+        int i, j = 0;
+
+        for (i = 0; i < len; i++) {  
+            if (str[i] != '\"') {
+                result[j++] = str[i];
+            }
+        }
+
+        result[j] = '\0';
+        return result;
+    }
 %}
+
 %define parse.error verbose //aparecer mais detalhes dos erros
 %union {
-    char * ystr;
-    int   yint;
+    int yint;
     float yfloat;
+    char *ystr;
 }
-%start begin
-%token LET INTEGER IN  SKIP IF FI THEN ELSE END WHILE DO READ WRITE
-%token ATRIB
-%token <yint> NUMERO
-%token <yfloat> REAL
-%token <ystr> ID
+%start program
+%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE
+%token CLASS_IDENTIFIER
+%token <yint> NUMBER
+%token <yfloat> FLOAT
+%token <ystr> STRING IDENTIFIER
+%token TRUE FALSE CONSOLE_LOG VAR CONST RETURN FUNCTION
+%token LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA
+%token SINGLE_QUOTE ADD MINUS DOT DOUBLE_QUOTE MULT DIV EXP GT LT
+%token EQ BACKTICK DOLLAR
+%token REAL NUMERO BOOLEAN ERROR_LITERAL ANY_TYPE SUB MUL LPAREN RPAREN CRASIS_QUOTE
 %left '-' '+'
 %left '*' '/'
 %right '^'
-%nonassoc '<' '>' '='
-%type  <yint> exp
+%left '>' '<' '='
+
+%type <ystr> expression
 
 %%
-begin : LET  declarations IN commands END
-;
 
-declarations : INTEGER { current_type=INT; fprintf(output,"int");} idlist ';' {fprintf(output,";");}  declarations
-| REAL {current_type=FLT; fprintf(output,"float");}   idlist ';' {fprintf(output,";");}  declarations
-| /*epslon*/  {current_type=UNDECL; }
-;
+program:
+    declarations
+    ;
 
-idlist : ID  { fprintf(output,"%s",$1); CHECKIFVARISDECLARED ($1); }
-| ID ',' {fprintf(output,"%s,",$1);} idlist  {CHECKIFVARISDECLARED ($1); }
-;
+declarations:
+    declaration
+    | declarations declaration
+    ;
 
-commands : /* empty */
-|  command ';' commands
-;
+declaration:
+    variavel_declaration SEMICOLON
+    | variavel_declaration '\n'
+    ;
 
-command : SKIP
-| READ ID
-| WRITE exp
-| ID ATRIB exp { VAR* node= FindVAR($1);
-                 if (node==NULL)  printf ("Variável %s não declarada",$1);
-                 else {
-                    if ( node->type != $3 && !(node->type == INT && $3 == FLT)){
-                           printf (" Tipo de %s não compátivel com a operação na linha %i \n",$1,yylineno);
-                           semanticerror =1 ;
-                         }
-                 }
-               }
-| IF exp THEN commands FI
-| WHILE exp DO commands END
-;
+variavel_declaration:
+    LET IDENTIFIER ASSIGN expression {
+        fprintf(output, "%s := ", $2);
+    } expression
+    ;
 
-exp : REAL { $$ = FLT;  }
-| NUMERO  { $$ = INT;  }
-| ID      {                 VAR* node= FindVAR($1);
-                            int type ;
-                            if (node==NULL)
-                                 $$= UNDECL ;
-                            else $$= node->type ;
-                            }
-| exp '<''=' exp
-| exp '>''=' exp
-| exp '<' exp
-| exp '=' exp
-| exp '>' exp
-| exp '+' exp  {
-                  $$ = INT;
-                  if ($1==FLT || $3==FLT )
-                        $$ = FLT;
-                  if ($1==UNDECL || $3==UNDECL )
-                        $$ = UNDECL;
-      }
-| exp '-' exp
-| exp '*' exp
-| exp '/' exp
-| exp '^' exp
-| '(' exp ')'  { $$ = $2; }
-;
-
+expression:
+    NUMBER { fprintf(output, "%d", $1); }
+    | FLOAT { fprintf(output, "%f", $1); }
+    | IDENTIFIER { fprintf(output, "%s", $1); }
+    ;
 
 %%
 main( int argc, char *argv[] )
 {
-  init_stringpool(10000);
-  output = fopen("output.c","w");
- if ( yyparse () == 0 && semanticerror ==0) printf("codigo sem erros \n");
+    init_stringpool(10000);
+    output = fopen("output.go","w");
+    if ( yyparse () == 0) printf("codigo sem erros \n");
 }
 
 yyerror (char *s) /* Called by yyparse on error */
 {
-printf ("%s  na linha %d\n", s, yylineno );
+    printf ("%s  na linha %d\n", s, yylineno );
 }
