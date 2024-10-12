@@ -7,8 +7,8 @@ let x: number = 200;
 ;
 ;
 
-console.log(`w = ${w}`)
-console.log(`x = ${x}`)
-console.log(`z = ${z}`)
-console.log("gfhfghd")
-console.log('jjjnjjnjn')
+console.log(`w = ${w}`);
+console.log(`x = ${x}`);
+console.log(`z = ${z}`);
+console.log("gfhfghd");
+console.log('jjjnjjnjn');

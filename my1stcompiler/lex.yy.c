@@ -947,22 +947,22 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 42 "scanner.l"
-{return '+'; }
+{return(ADD); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 43 "scanner.l"
-{return '-'; }
+{return(SUB); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 44 "scanner.l"
-{return '*'; }
+{return(MUL); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 45 "scanner.l"
-{return '/'; }
+{return(DIV); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP

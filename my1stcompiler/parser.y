@@ -7,7 +7,7 @@
                 if ( node == NULL )\
                    AddVAR(x,current_type);\
                 else {\
-                   printf("Variável %s já declarada na  linha %d\n",x,yylineno);\
+                   printf("Variável %s já declarada na linha %d\n",x,yylineno);\
                    semanticerror =1 ;\
                 }\
                }
@@ -19,6 +19,8 @@
 
     FILE *output;
 
+    int is_number(const char* value);
+    int is_string(const char* value);
 %}
 
 %define parse.error verbose
@@ -37,9 +39,7 @@
 %token FLOAT
 %token BOOLEAN ERROR_LITERAL NUMBER_TYPE STRING_TYPE BOOLEAN_TYPE ANY_TYPE RETURN FUNCTION
 %token EQ COLON LBRACKET RBRACKET LBRACE RBRACE COMMA DOT EXP GT LT DOUBLE_QUOTE SINGLE_QUOTE CRASIS_QUOTE DOLLAR
-%left '-' '+'
-%left '*' '/'
-%right '^'
+%token ADD SUB MUL DIV
 
 %type <ystr> expression
 %type <ystr> variable_declaration
@@ -57,7 +57,7 @@ statements:
 
 statement:
     variable_declaration SEMICOLON { fprintf(output, ";"); }
-    | console_log SEMICOLON
+    | console_log SEMICOLON { fprintf(output, ";"); }
     | expression_statement
 ;   
 
@@ -100,30 +100,55 @@ console_log:
 
 expression:
     NUMBER { $$ = strdup(yytext); }
-    | FLOAT { $$ = strdup(yytext); }
-    | IDENTIFIER { $$ = strdup(yytext); }
+    | IDENTIFIER {
+        // Aqui, verifica se o identificador é do tipo number
+        if (is_number($1)) {
+            $$ = strdup(yytext);
+        } else {
+            printf("Erro semântico: %s não é do tipo number.\n", $1);
+            semanticerror = 1;
+        }
+    }
     | STRING { $$ = strdup(yytext); }
-    | expression '+' expression { 
-                                    char *result = malloc(strlen($1) + strlen($3) + 4);
-                                    sprintf(result, "%s + %s", $1, $3);
-                                    $$ = result;
-                                }
-    | expression '-' expression { 
-                                    char *result = malloc(strlen($1) + strlen($3) + 4);
-                                    sprintf(result, "%s - %s", $1, $3);
-                                    $$ = result;
-                                }
-    | expression '*' expression { 
-                                    char *result = malloc(strlen($1) + strlen($3) + 4);
-                                    sprintf(result, "%s * %s", $1, $3);
-                                    $$ = result;
-                                }
-    | expression '/' expression { 
-                                    char *result = malloc(strlen($1) + strlen($3) + 4);
-                                    sprintf(result, "%s / %s", $1, $3);
-                                    $$ = result;
-                                }
+    | expression ADD expression {
+        if (is_number($1) && is_number($3)) {
+            $$ = (char*) malloc(strlen($1) + strlen($3) + 4);
+            sprintf($$, "%s + %s", $1, $3);
+        } else {
+            printf("Erro semântico: operação aritmética não permitida entre tipos incompatíveis.\n");
+            semanticerror = 1;
+        }
+    }
+    | expression SUB expression {
+        if (is_number($1) && is_number($3)) {
+            $$ = (char*) malloc(strlen($1) + strlen($3) + 4);
+            sprintf($$, "%s - %s", $1, $3);
+        } else {
+            printf("Erro semântico: operação aritmética não permitida entre tipos incompatíveis.\n");
+            semanticerror = 1;
+        }
+    }
+    | expression MUL expression {
+        if (is_number($1) && is_number($3)) {
+            $$ = (char*) malloc(strlen($1) + strlen($3) + 4);
+            sprintf($$, "%s * %s", $1, $3);
+        } else {
+            printf("Erro semântico: operação aritmética não permitida entre tipos incompatíveis.\n");
+            semanticerror = 1;
+        }
+    }
+    | expression DIV expression {
+        if (is_number($1) && is_number($3)) {
+            $$ = (char*) malloc(strlen($1) + strlen($3) + 4);
+            sprintf($$, "%s / %s", $1, $3);
+        } else {
+            printf("Erro semântico: operação aritmética não permitida entre tipos incompatíveis.\n");
+            semanticerror = 1;
+        }
+    }
 ;
+
+
 
 %%
 
@@ -145,20 +170,27 @@ void yyerror(const char *s) {
 }
 
 int is_number(const char* value) {
-    int i;
+    int i = 0;
+    int has_dot = 0;
+    
+    // Verifica cada caractere
     for (i = 0; i < strlen(value); i++) {
         if (!isdigit(value[i])) {
-            return 0;
+            if (value[i] == '.' && !has_dot) {
+                has_dot = 1; // Permite apenas um ponto decimal
+            } else {
+                return 0; // Não é um número
+            }
         }
     }
-    return 1;
+    return 1; // É um número
 }
 
-
 int is_string(const char* value) {
-    // Verifica se começa e termina com aspas simples ou duplas
+    // Verifica se começa e termina com aspas simples, duplas ou crase
     if ((value[0] == '"' && value[strlen(value)-1] == '"') ||
-        (value[0] == '\'' && value[strlen(value)-1] == '\'')) {
+        (value[0] == '\'' && value[strlen(value)-1] == '\'') ||
+        (value[0] == '`' && value[strlen(value)-1] == '`')) {
         return 1;
     }
     return 0;

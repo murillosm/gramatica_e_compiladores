@@ -3,9 +3,9 @@ let nome = "João";
 var sobrenome = 'Silva';
 let x = 200;
 
-let z = w + x;
+let z = 10 + 2;
 var s = 10 + 20;
-var t = s + z - z;
+var t = s + z + z;
 
 console.log(`w = ${w}`);
 console.log(`x = ${x}`);

@@ -39,10 +39,10 @@ any             {return(ANY_TYPE); }
 return          {return(RETURN); }
 function        {return(FUNCTION); }
 
-"+"             {return '+'; }
-"-"             {return '-'; }
-"*"             {return '*'; }
-"/"             {return '/'; }
+"+"             {return(ADD); }
+"-"             {return(SUB); }
+"*"             {return(MUL); }
+"/"             {return(DIV); }
 "="             {return(ASSIGN); }
 "=="            {return(EQ); }
 ":"             {return(COLON); }

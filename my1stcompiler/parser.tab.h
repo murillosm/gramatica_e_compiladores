@@ -79,7 +79,11 @@ extern int yydebug;
     DOUBLE_QUOTE = 289,
     SINGLE_QUOTE = 290,
     CRASIS_QUOTE = 291,
-    DOLLAR = 292
+    DOLLAR = 292,
+    ADD = 293,
+    SUB = 294,
+    MUL = 295,
+    DIV = 296
   };
 #endif
 
@@ -88,13 +92,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "parser.y" /* yacc.c:1909  */
+#line 27 "parser.y" /* yacc.c:1909  */
 
     char * ystr;
     int   yint;
     float yfloat;
 
-#line 98 "parser.tab.h" /* yacc.c:1909  */
+#line 102 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
