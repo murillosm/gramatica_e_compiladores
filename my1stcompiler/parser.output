@@ -59,23 +59,20 @@ Grammar
 
     1 program: declarations
 
-    2 declarations: declaration
-    3             | declarations declaration
+    2 declarations: variavel_declaration SEMICOLON
+    3             | declarations variavel_declaration SEMICOLON
 
-    4 declaration: variavel_declaration SEMICOLON
-    5            | variavel_declaration '\n'
+    4 $@1: %empty
 
-    6 variavel_declaration: LET IDENTIFIER ASSIGN expression
+    5 variavel_declaration: LET IDENTIFIER ASSIGN $@1 expression
 
-    7 expression: NUMBER
-    8           | FLOAT
-    9           | IDENTIFIER
+    6 expression: NUMBER
+    7           | FLOAT
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'\n' (10) 5
 '*' (42)
 '+' (43)
 '-' (45)
@@ -85,18 +82,18 @@ $end (0) 0
 '>' (62)
 '^' (94)
 error (256)
-LET (258) 6
+LET (258) 5
 COLON (259)
 NUMBER_TYPE (260)
 STRING_TYPE (261)
-ASSIGN (262) 6
-SEMICOLON (263) 4
+ASSIGN (262) 5
+SEMICOLON (263) 2 3
 BOOLEAN_TYPE (264)
 CLASS_IDENTIFIER (265)
-NUMBER (266) 7
-FLOAT (267) 8
+NUMBER (266) 6
+FLOAT (267) 7
 STRING (268)
-IDENTIFIER (269) 6 9
+IDENTIFIER (269) 5
 TRUE (270)
 FALSE (271)
 CONSOLE_LOG (272)
@@ -138,18 +135,18 @@ CRASIS_QUOTE (306)
 
 Nonterminals, with rules where they appear
 
-$accept (61)
+$accept (60)
     on left: 0
-program (62)
+program (61)
     on left: 1, on right: 0
-declarations (63)
+declarations (62)
     on left: 2 3, on right: 1 3
-declaration (64)
-    on left: 4 5, on right: 2 3
-variavel_declaration (65)
-    on left: 6, on right: 4 5
-expression (66)
-    on left: 7 8 9, on right: 6
+variavel_declaration (63)
+    on left: 5, on right: 2 3
+$@1 (64)
+    on left: 4, on right: 5
+expression (65)
+    on left: 6 7, on right: 5
 
 
 State 0
@@ -160,122 +157,112 @@ State 0
 
     program               go to state 2
     declarations          go to state 3
-    declaration           go to state 4
-    variavel_declaration  go to state 5
+    variavel_declaration  go to state 4
 
 
 State 1
 
-    6 variavel_declaration: LET . IDENTIFIER ASSIGN expression
+    5 variavel_declaration: LET . IDENTIFIER ASSIGN $@1 expression
 
-    IDENTIFIER  shift, and go to state 6
+    IDENTIFIER  shift, and go to state 5
 
 
 State 2
 
     0 $accept: program . $end
 
-    $end  shift, and go to state 7
+    $end  shift, and go to state 6
 
 
 State 3
 
     1 program: declarations .
-    3 declarations: declarations . declaration
+    3 declarations: declarations . variavel_declaration SEMICOLON
 
     LET  shift, and go to state 1
 
     $default  reduce using rule 1 (program)
 
-    declaration           go to state 8
-    variavel_declaration  go to state 5
+    variavel_declaration  go to state 7
 
 
 State 4
 
-    2 declarations: declaration .
+    2 declarations: variavel_declaration . SEMICOLON
 
-    $default  reduce using rule 2 (declarations)
+    SEMICOLON  shift, and go to state 8
 
 
 State 5
 
-    4 declaration: variavel_declaration . SEMICOLON
-    5            | variavel_declaration . '\n'
+    5 variavel_declaration: LET IDENTIFIER . ASSIGN $@1 expression
 
-    SEMICOLON  shift, and go to state 9
-    '\n'       shift, and go to state 10
+    ASSIGN  shift, and go to state 9
 
 
 State 6
-
-    6 variavel_declaration: LET IDENTIFIER . ASSIGN expression
-
-    ASSIGN  shift, and go to state 11
-
-
-State 7
 
     0 $accept: program $end .
 
     $default  accept
 
 
+State 7
+
+    3 declarations: declarations variavel_declaration . SEMICOLON
+
+    SEMICOLON  shift, and go to state 10
+
+
 State 8
 
-    3 declarations: declarations declaration .
+    2 declarations: variavel_declaration SEMICOLON .
 
-    $default  reduce using rule 3 (declarations)
+    $default  reduce using rule 2 (declarations)
 
 
 State 9
 
-    4 declaration: variavel_declaration SEMICOLON .
+    5 variavel_declaration: LET IDENTIFIER ASSIGN . $@1 expression
 
-    $default  reduce using rule 4 (declaration)
+    $default  reduce using rule 4 ($@1)
+
+    $@1  go to state 11
 
 
 State 10
 
-    5 declaration: variavel_declaration '\n' .
+    3 declarations: declarations variavel_declaration SEMICOLON .
 
-    $default  reduce using rule 5 (declaration)
+    $default  reduce using rule 3 (declarations)
 
 
 State 11
 
-    6 variavel_declaration: LET IDENTIFIER ASSIGN . expression
+    5 variavel_declaration: LET IDENTIFIER ASSIGN $@1 . expression
 
-    NUMBER      shift, and go to state 12
-    FLOAT       shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
+    NUMBER  shift, and go to state 12
+    FLOAT   shift, and go to state 13
 
-    expression  go to state 15
+    expression  go to state 14
 
 
 State 12
 
-    7 expression: NUMBER .
+    6 expression: NUMBER .
 
-    $default  reduce using rule 7 (expression)
+    $default  reduce using rule 6 (expression)
 
 
 State 13
 
-    8 expression: FLOAT .
+    7 expression: FLOAT .
 
-    $default  reduce using rule 8 (expression)
+    $default  reduce using rule 7 (expression)
 
 
 State 14
 
-    9 expression: IDENTIFIER .
+    5 variavel_declaration: LET IDENTIFIER ASSIGN $@1 expression .
 
-    $default  reduce using rule 9 (expression)
-
-
-State 15
-
-    6 variavel_declaration: LET IDENTIFIER ASSIGN expression .
-
-    $default  reduce using rule 6 (variavel_declaration)
+    $default  reduce using rule 5 (variavel_declaration)

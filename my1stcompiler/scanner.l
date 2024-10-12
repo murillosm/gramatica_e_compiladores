@@ -23,7 +23,7 @@ FALSE false
 {FLOAT}         {yylval.yfloat = atof(yytext); return (FLOAT);}
 {TRUE}          {yylval.ystr = strdup(yytext); return (BOOLEAN);}
 {FALSE}         {yylval.ystr = strdup(yytext); return (BOOLEAN);}
-Error           { printf("Reconhecido: ERROR_LITERAL (%s)\n", yytext); return (ERROR_LITERAL);}
+
 "console.log"   {return (CONSOLE_LOG); }
 
 let             {return(LET); }
@@ -56,8 +56,8 @@ function        {return(FUNCTION); }
 "'"             {return SINGLE_QUOTE; }
 "`"             {return CRASIS_QUOTE; }
 "\$"            {return DOLLAR; }
-\n  { /* Ignorar quebras de linha */ }
-[ \t]+  { /* Ignorar espaços em branco */ }
+[\n]+           { /* Ignorar quebras de linha */ }
+[\t ]+          { /* Ignorar espaços em branco */ }
 {ID}            { yylval.ystr = stringpool(yytext); return IDENTIFIER; }
 "//".*          { /* Ignorar comentários de linha única */ }
 .          { return yytext[0]; }

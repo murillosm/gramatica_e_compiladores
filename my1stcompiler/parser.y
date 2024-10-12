@@ -11,7 +11,7 @@
 
     char identifierDefined[100];
 
-    char* remove_quotes(const char* str) {
+   char* remove_quotes(const char* str) {
         int len = strlen(str);
         char* result = (char*)malloc(len + 1);
         int i, j = 0;
@@ -33,7 +33,6 @@
     float yfloat;
     char *ystr;
 }
-%start program
 %token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE
 %token CLASS_IDENTIFIER
 %token <yint> NUMBER
@@ -58,26 +57,17 @@ program:
     ;
 
 declarations:
-    declaration
-    | declarations declaration
-    ;
-
-declaration:
     variavel_declaration SEMICOLON
-    | variavel_declaration '\n'
+    | declarations variavel_declaration SEMICOLON
     ;
 
 variavel_declaration:
-    LET IDENTIFIER ASSIGN expression {
-        fprintf(output, "%s := ", $2);
-    } expression
+    LET IDENTIFIER ASSIGN { fprintf(output, "%s := ", $2); } expression
     ;
 
 expression:
     NUMBER { fprintf(output, "%d", $1); }
     | FLOAT { fprintf(output, "%f", $1); }
-    | IDENTIFIER { fprintf(output, "%s", $1); }
-    ;
 
 %%
 main( int argc, char *argv[] )
@@ -88,6 +78,7 @@ main( int argc, char *argv[] )
 }
 
 yyerror (char *s) /* Called by yyparse on error */
+
 {
-    printf ("%s  na linha %d\n", s, yylineno );
+printf ("%s  na linha %d\n", s, yylineno );
 }
