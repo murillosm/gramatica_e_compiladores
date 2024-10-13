@@ -60,8 +60,8 @@ let doubled = numbers.map(n => n * 2);
 ```
 Go:
 ```go
-numbers := []int{1, 2, 3, 4}
-doubled := make([]int, len(numbers))
+numbers := []{1, 2, 3, 4}
+doubled := make([], len(numbers))
 for i, n := range numbers {
     doubled[i] = n * 2
 }

@@ -36,6 +36,9 @@ float           { printf("Reconhecido: FLOAT_TYPE\n"); return(NUMBER_TYPE); }
 boolean         { printf("Reconhecido: BOOLEAN_TYPE\n"); return(BOOLEAN_TYPE); }
 return          { printf("Reconhecido: RETURN\n"); return(RETURN); }
 function        { printf("Reconhecido: FUNCTION\n"); return(FUNCTION); }
+if              { printf("Reconhecido: IF\n"); return(IF); }
+else            { printf("Reconhecido: ELSE\n"); return(ELSE); }
+"=>"           { printf("Reconhecido: ARROW\n"); return(ARROW); }
 
 "="             { printf("Reconhecido: ASSIGN\n"); return(ASSIGN); }
 "=="            { printf("Reconhecido: EQ\n"); return(EQ); }
@@ -51,8 +54,6 @@ function        { printf("Reconhecido: FUNCTION\n"); return(FUNCTION); }
 "."             { printf("Reconhecido: DOT\n"); return DOT; }
 
 "^"             { printf("Reconhecido: EXP\n"); return EXP; }
-">"             { printf("Reconhecido: GT\n"); return GT; }
-"<"             { printf("Reconhecido: LT\n"); return LT; }
 "\""            { printf("Reconhecido: DOUBLE_QUOTE\n"); return DOUBLE_QUOTE; }
 "'"             { printf("Reconhecido: SINGLE_QUOTE\n"); return SINGLE_QUOTE; }
 "`"             { printf("Reconhecido: BACKTICK\n"); return BACKTICK; }

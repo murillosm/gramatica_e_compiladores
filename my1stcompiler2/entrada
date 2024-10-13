@@ -10,30 +10,26 @@ const i = 3.4;
 
 let j = 5 + 5 + 5;
 
-// function somar(a, b) {
-//     return a + b;
-// }
+if ((x + 2 ) > 5) {
+    let y = 20;
+    console.log(y);
+}
+console.log(x);
 
-// let resultado = somar(5, 3);
+let sum = (a, b) => a + b;
 
-// console.log("O resultado da soma é: " + resultado);
+const soma = (a, b) => a + b;
 
-// let arr = [1, 2, 3];
 
-// function pessoa(nome, sobrenome) {
-//     return nome + " " + sobrenome;
-// }
+let numbers = [1, 2, 3, 4];
+let doubled = numbers.map(n => n * 2);
 
-// let nome_completo = pessoa("Murillo", "Medeiros");
+// soma(3, 4)
 
-// function animal(nome, idade) {
-//     return `O ${nome} tem ${idade} anos.`;
-// }
+// console.log(soma(3, 4));
 
-// let animal_info = animal("Cachorro", 5);
-
-// console.log(animal_info);
-
-// function erro(){
-//     return "Erro";
-// }
+// const saudacao = () => {
+//     console.log("Olá, mundo!");
+//   };
+//   saudacao();
+  

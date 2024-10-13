@@ -38,21 +38,21 @@
     char *ystr;
 }
 %start begin
-%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE CLASS_IDENTIFIER
+%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE CLASS_IDENTIFIER IF ELSE
 %token <ystr> IDENTIFIER 
 %token <yint> NUMBER
 %token <yfloat> FLOAT
 %token <ystr> STRING
 %token TRUE FALSE CONSOLE_LOG CONST RETURN FUNCTION BOOLEAN ERROR
 %token LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA
-%token SINGLE_QUOTE DOT DOUBLE_QUOTE EXP GT LT
-%token EQ BACKTICK DOLLAR
+%token SINGLE_QUOTE DOT DOUBLE_QUOTE EXP
+%token EQ BACKTICK DOLLAR ARROW
 %left '-' '+'
 %left '*' '/'
 %right '^'
 %left '>' '<' '='
 
-%type <ystr> expression
+%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements
 
 %%
 begin : 
@@ -61,7 +61,7 @@ begin :
 
 statements:
     statement statements
-    | /* empty */
+    | /* empty */ { fprintf(output, ""); }
 ;
 
 statement:
@@ -72,11 +72,12 @@ statement:
     | console_log
     | expression_statement
     | return_statement
+    | if_statement
 ;
 
 variable_declaration:
-    LET IDENTIFIER ASSIGN expression { fprintf(output, "%s := ", $2); fprintf(output, "%s", $4); }
-    | CONST IDENTIFIER ASSIGN expression { fprintf(output, "const %s = ", $2); fprintf(output, "%s", $4); }
+    LET IDENTIFIER ASSIGN expressions { fprintf(output, "%s := ", $2); fprintf(output, "%s", $4); }
+    | CONST IDENTIFIER ASSIGN expressions { fprintf(output, "const %s = ", $2); fprintf(output, "%s", $4); }
 ;
 
 function_declaration:
@@ -84,64 +85,82 @@ function_declaration:
 ;
 
 parameter_list:
-    IDENTIFIER
-    | IDENTIFIER COMMA parameter_list
-    | /* empty */
+    expressions
+    | expressions COMMA array_elements { asprintf(&$$, "%s, %s", $1, $3); }
+    | /* empty */ { $$ = strdup(""); }
 ;
 
 function_call:
-    IDENTIFIER LPARENTHESES argument_list RPARENTHESES SEMICOLON
-    | IDENTIFIER LPARENTHESES argument_list RPARENTHESES
+    expressions LPARENTHESES argument_list RPARENTHESES { fprintf(output, "%s(%s)", $1, $3); }
 ;
 
 argument_list:
-    expression
-    | expression COMMA argument_list
-    | /* empty */
+    expressions
+    | expressions COMMA argument_list
+    | /* empty */ { $$ = strdup(""); }
 ;
 
 console_log:
-    CONSOLE_LOG LPARENTHESES expression RPARENTHESES SEMICOLON
+    CONSOLE_LOG LPARENTHESES expressions RPARENTHESES SEMICOLON { fprintf(output, "fmt.Println(%s)", $3); }
 ;
 
 expression_statement:
-    expression SEMICOLON
+    expressions SEMICOLON
 ;
 
 return_statement:
-    RETURN expression SEMICOLON
-    | RETURN expression
+    RETURN expressions SEMICOLON
+    | RETURN expressions
 ;
 
-expression:
+
+if_statement:
+    IF LPARENTHESES expressions RPARENTHESES LBRACE { fprintf(output, "if %s {", $3); } statements RBRACE { fprintf(output, "}\n"); } else_declaration
+;
+
+else_declaration:
+    ELSE LBRACE { fprintf(output, "else {\n\t"); } statements RBRACE  statements RBRACE { fprintf(output, "\n}\n"); }
+    | /* empty */
+;
+
+expressions:
     NUMBER { $$ = strdup(yytext); }
     | FLOAT { $$ = strdup(yytext); }
     | STRING { $$ = remove_quotes(yytext); }
     | BOOLEAN { $$ = strdup(yytext); }
     | IDENTIFIER { $$ = strdup(yytext); }
-    | expression '+' expression { asprintf(&$$, "%s + %s", $1, $3); }
-    | expression '-' expression { asprintf(&$$, "%s - %s", $1, $3); }
-    | expression '*' expression { asprintf(&$$, "%s * %s", $1, $3); }
-    | expression '/' expression { asprintf(&$$, "%s / %s", $1, $3); }
-;    
+    | expressions '+' expressions { asprintf(&$$, "%s + %s", $1, $3); }
+    | expressions '-' expressions { asprintf(&$$, "%s - %s", $1, $3); }
+    | expressions '*' expressions { asprintf(&$$, "%s * %s", $1, $3); }
+    | expressions '/' expressions { asprintf(&$$, "%s / %s", $1, $3); }
+    | expressions '^' expressions { asprintf(&$$, "%s ^ %s", $1, $3); }
+    | expressions EQ expressions { asprintf(&$$, "%s == %s", $1, $3); }
+    | expressions ASSIGN expressions { asprintf(&$$, "%s = %s", $1, $3); }
+    | expressions '>' expressions { asprintf(&$$, "%s > %s", $1, $3); }
+    | expressions '<' expressions { asprintf(&$$, "%s < %s", $1, $3); }
+    | LPARENTHESES expressions RPARENTHESES { asprintf(&$$, "(%s)", $2); }
+    | LPARENTHESES parameter_list RPARENTHESES ARROW expressions { asprintf(&$$, "func(%s) {\n\treturn %s\n}", $2, $5); }
+    | LPARENTHESES RPARENTHESES ARROW expressions { asprintf(&$$, "func() {\n\treturn %s\n}", $4); }
+    | LPARENTHESES array_elements RPARENTHESES { fprintf(output, "(%s)", $2); }
+; 
 
 interpolated_expression:
-    interpolated_part
-    | interpolated_expression interpolated_part
+    interpolated_part { $$ = strdup($1); }
+    | interpolated_expression interpolated_part { asprintf(&$$, "%s%s", $1, $2); }
 ;
 
 interpolated_part:
-    STRING
-    | DOLLAR LBRACE expression RBRACE
+    STRING { $$ = strdup($1); }
+    | DOLLAR LBRACE expressions RBRACE { asprintf(&$$, "${%s}", $3); }
 ;
 
 array:
-    LBRACKET array_elements RBRACKET
+    LBRACKET array_elements RBRACKET { asprintf(&$$, "[%s]", $2); }
 ;
 
 array_elements:
-    expression
-    | expression COMMA array_elements
+    expressions { $$ = strdup($1); }
+    | expressions COMMA array_elements { fprintf(output, "%s, %s", $1, $3); }
 ;
 
 %%
