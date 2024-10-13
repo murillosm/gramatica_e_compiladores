@@ -13,9 +13,11 @@ j := 5 + 5 + 5
 if (x + 2) > 5 {
 y := 20
 fmt.Println(y)
+
 }
 
 fmt.Println(x)
+
 
 sum := func(a, b) {
 	return a + b
@@ -32,3 +34,9 @@ for i, n := range numbers {
 	doubled[i] = n * 2
 }
 
+soma(3, 4)
+fmt.Println(result)
+
+
+
+fetch(url)response := await fetch

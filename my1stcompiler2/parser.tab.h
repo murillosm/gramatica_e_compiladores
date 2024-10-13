@@ -82,7 +82,9 @@ extern int yydebug;
     EQ = 292,
     BACKTICK = 293,
     DOLLAR = 294,
-    ARROW = 295
+    ARROW = 295,
+    ASYNC = 296,
+    AWAIT = 297
   };
 #endif
 
@@ -97,7 +99,7 @@ union YYSTYPE
     float yfloat;
     char *ystr;
 
-#line 101 "parser.tab.h" /* yacc.c:1909  */
+#line 103 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

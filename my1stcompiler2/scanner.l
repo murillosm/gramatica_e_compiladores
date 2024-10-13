@@ -40,6 +40,8 @@ if              { printf("Reconhecido: IF\n"); return(IF); }
 else            { printf("Reconhecido: ELSE\n"); return(ELSE); }
 map             { printf("Reconhecido: MAP\n"); return(MAP); }
 "=>"           { printf("Reconhecido: ARROW\n"); return(ARROW); }
+"async"         { printf("Reconhecido: ASYNC\n"); return(ASYNC); }
+"await"         { printf("Reconhecido: AWAIT\n"); return(AWAIT); }
 
 "="             { printf("Reconhecido: ASSIGN\n"); return(ASSIGN); }
 "=="            { printf("Reconhecido: EQ\n"); return(EQ); }
@@ -61,9 +63,12 @@ map             { printf("Reconhecido: MAP\n"); return(MAP); }
 "\$"            { printf("Reconhecido: DOLLAR\n"); return DOLLAR; }
 
 {ID}            { printf("Reconhecido: IDENTIFIER (%s)\n", yytext); yylval.ystr = stringpool(yytext); return(IDENTIFIER);}
-"\\"[ a-z]*\n 
+"//".*              { /* Ignora comentários de linha */ }
+"/*"([^*]|\*+[^/])*\*+"/"  { /* Ignora comentários de múltiplas linhas */ }
+
 "\n"                { fprintf(output,"\n"); /*incrementa sozinho lineno*/ }
 [ \t]+              
+
 .          { return yytext[0]; }
 
 %%

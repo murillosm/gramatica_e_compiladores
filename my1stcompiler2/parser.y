@@ -47,12 +47,13 @@
 %token LBRACKET RBRACKET LBRACE RBRACE LPARENTHESES RPARENTHESES COMMA
 %token SINGLE_QUOTE DOT DOUBLE_QUOTE EXP
 %token EQ BACKTICK DOLLAR ARROW
+%token ASYNC AWAIT
 %left '-' '+'
 %left '*' '/'
 %right '^'
 %left '>' '<' '='
 
-%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements array_map
+%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements array_manipulate async_function console_arguments
 
 %%
 begin : 
@@ -68,7 +69,7 @@ statement:
     variable_declaration
     | variable_declaration SEMICOLON
     | function_declaration
-    | function_call
+    | async_function
     | console_log
     | expression_statement
     | return_statement
@@ -91,7 +92,7 @@ parameter_list:
 ;
 
 function_call:
-    expressions LPARENTHESES argument_list RPARENTHESES { fprintf(output, "%s(%s)", $1, $3); }
+    expressions LPARENTHESES array_elements RPARENTHESES { fprintf(output, "%s(%s)", $1, $3); }
 ;
 
 argument_list:
@@ -101,7 +102,17 @@ argument_list:
 ;
 
 console_log:
-    CONSOLE_LOG LPARENTHESES expressions RPARENTHESES SEMICOLON { fprintf(output, "fmt.Println(%s)", $3); }
+    CONSOLE_LOG LPARENTHESES console_arguments RPARENTHESES SEMICOLON { fprintf(output, "fmt.Println(%s)\n", $3); }
+;
+
+
+
+console_arguments:
+
+    expressions { $$ = strdup($1); }
+
+    | expressions COMMA console_arguments { asprintf(&$$, "%s, %s", $1, $3); }
+
 ;
 
 expression_statement:
@@ -130,7 +141,8 @@ expressions:
     | BOOLEAN { $$ = strdup(yytext); }
     | IDENTIFIER { $$ = strdup(yytext); }
     | array { $$ = strdup($1); }
-    | array_map
+    | array_manipulate
+    | function_call
     | expressions '+' expressions { asprintf(&$$, "%s + %s", $1, $3); }
     | expressions '-' expressions { asprintf(&$$, "%s - %s", $1, $3); }
     | expressions '*' expressions { asprintf(&$$, "%s * %s", $1, $3); }
@@ -145,14 +157,22 @@ expressions:
     | LPARENTHESES array_elements RPARENTHESES ARROW expressions { asprintf(&$$, "func(%s) {\n\treturn %s\n}", $2, $5); }
     | LPARENTHESES RPARENTHESES ARROW expressions { asprintf(&$$, "func() {\n\treturn %s\n}", $4); }
     | LPARENTHESES array_elements RPARENTHESES { fprintf(output, "(%s)", $2); }  
+    | AWAIT expressions { asprintf(&$$, "await %s", $2); }
 ;
 
-array_map:
+array_manipulate:
 	expressions DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES { 
 		asprintf(&$$, "make([]any, len(%s))\nfor i, %s := range %s {\n\tdoubled[i] = %s\n}", $1, $5, $1, $7); 
 	}
 ;
 
+async_function:
+    ASYNC FUNCTION expressions LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE {
+        fprintf(output, "func %s(%s) {\n", $3, $5);
+        fprintf(output, "%s\n", $8);
+        fprintf(output, "}\n");
+    }
+;
 
 interpolated_expression:
     interpolated_part { $$ = strdup($1); }
