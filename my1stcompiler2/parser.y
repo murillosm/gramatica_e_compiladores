@@ -38,7 +38,7 @@
     char *ystr;
 }
 %start begin
-%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE CLASS_IDENTIFIER IF ELSE
+%token LET COLON NUMBER_TYPE STRING_TYPE ASSIGN SEMICOLON BOOLEAN_TYPE CLASS_IDENTIFIER IF ELSE MAP
 %token <ystr> IDENTIFIER 
 %token <yint> NUMBER
 %token <yfloat> FLOAT
@@ -52,7 +52,7 @@
 %right '^'
 %left '>' '<' '='
 
-%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements
+%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements array_map
 
 %%
 begin : 
@@ -129,6 +129,8 @@ expressions:
     | STRING { $$ = remove_quotes(yytext); }
     | BOOLEAN { $$ = strdup(yytext); }
     | IDENTIFIER { $$ = strdup(yytext); }
+    | array { $$ = strdup($1); }
+    | array_map
     | expressions '+' expressions { asprintf(&$$, "%s + %s", $1, $3); }
     | expressions '-' expressions { asprintf(&$$, "%s - %s", $1, $3); }
     | expressions '*' expressions { asprintf(&$$, "%s * %s", $1, $3); }
@@ -138,11 +140,19 @@ expressions:
     | expressions ASSIGN expressions { asprintf(&$$, "%s = %s", $1, $3); }
     | expressions '>' expressions { asprintf(&$$, "%s > %s", $1, $3); }
     | expressions '<' expressions { asprintf(&$$, "%s < %s", $1, $3); }
+    | RBRACKET expressions LBRACKET { asprintf(&$$, "[%s]", $2); }
     | LPARENTHESES expressions RPARENTHESES { asprintf(&$$, "(%s)", $2); }
-    | LPARENTHESES parameter_list RPARENTHESES ARROW expressions { asprintf(&$$, "func(%s) {\n\treturn %s\n}", $2, $5); }
+    | LPARENTHESES array_elements RPARENTHESES ARROW expressions { asprintf(&$$, "func(%s) {\n\treturn %s\n}", $2, $5); }
     | LPARENTHESES RPARENTHESES ARROW expressions { asprintf(&$$, "func() {\n\treturn %s\n}", $4); }
-    | LPARENTHESES array_elements RPARENTHESES { fprintf(output, "(%s)", $2); }
-; 
+    | LPARENTHESES array_elements RPARENTHESES { fprintf(output, "(%s)", $2); }  
+;
+
+array_map:
+	expressions DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES { 
+		asprintf(&$$, "make([]any, len(%s))\nfor i, %s := range %s {\n\tdoubled[i] = %s\n}", $1, $5, $1, $7); 
+	}
+;
+
 
 interpolated_expression:
     interpolated_part { $$ = strdup($1); }
@@ -155,14 +165,13 @@ interpolated_part:
 ;
 
 array:
-    LBRACKET array_elements RBRACKET { asprintf(&$$, "[%s]", $2); }
+    LBRACKET array_elements RBRACKET { asprintf(&$$, "[]any{%s}", $2); }
 ;
 
 array_elements:
     expressions { $$ = strdup($1); }
-    | expressions COMMA array_elements { fprintf(output, "%s, %s", $1, $3); }
+    | expressions COMMA array_elements { asprintf(&$$, "%s, %s", $1, $3); }
 ;
-
 %%
 main( int argc, char *argv[] )
 {

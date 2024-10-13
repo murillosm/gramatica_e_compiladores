@@ -38,6 +38,7 @@ return          { printf("Reconhecido: RETURN\n"); return(RETURN); }
 function        { printf("Reconhecido: FUNCTION\n"); return(FUNCTION); }
 if              { printf("Reconhecido: IF\n"); return(IF); }
 else            { printf("Reconhecido: ELSE\n"); return(ELSE); }
+map             { printf("Reconhecido: MAP\n"); return(MAP); }
 "=>"           { printf("Reconhecido: ARROW\n"); return(ARROW); }
 
 "="             { printf("Reconhecido: ASSIGN\n"); return(ASSIGN); }

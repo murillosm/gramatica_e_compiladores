@@ -24,6 +24,12 @@ const soma = (a, b) => a + b;
 let numbers = [1, 2, 3, 4];
 let doubled = numbers.map(n => n * 2);
 
+async function fetchData() {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+}
+
 // soma(3, 4)
 
 // console.log(soma(3, 4));

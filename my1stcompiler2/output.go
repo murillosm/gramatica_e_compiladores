@@ -26,3 +26,9 @@ const soma = func(a, b) {
 }
 
 
+numbers := []any{1, 2, 3, 4}
+doubled := make([]any, len(numbers))
+for i, n := range numbers {
+	doubled[i] = n * 2
+}
+

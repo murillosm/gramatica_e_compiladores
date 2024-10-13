@@ -2,7 +2,6 @@ Nonterminals useless in grammar
 
    interpolated_expression
    interpolated_part
-   array
 
 
 Terminals unused in grammar
@@ -15,10 +14,7 @@ Terminals unused in grammar
    TRUE
    FALSE
    ERROR
-   LBRACKET
-   RBRACKET
    SINGLE_QUOTE
-   DOT
    DOUBLE_QUOTE
    EXP
    BACKTICK
@@ -28,29 +24,25 @@ Terminals unused in grammar
 
 Rules useless in grammar
 
-   52 interpolated_expression: interpolated_part
-   53                        | interpolated_expression interpolated_part
+   57 interpolated_expression: interpolated_part
+   58                        | interpolated_expression interpolated_part
 
-   54 interpolated_part: STRING
-   55                  | DOLLAR LBRACE expressions RBRACE
-
-   56 array: LBRACKET array_elements RBRACKET
+   59 interpolated_part: STRING
+   60                  | DOLLAR LBRACE expressions RBRACE
 
 
-State 12 conflicts: 1 shift/reduce
-State 32 conflicts: 1 shift/reduce, 1 reduce/reduce
-State 59 conflicts: 9 shift/reduce
-State 62 conflicts: 9 shift/reduce
-State 63 conflicts: 2 shift/reduce
-State 64 conflicts: 2 shift/reduce
-State 65 conflicts: 2 shift/reduce
-State 66 conflicts: 2 shift/reduce
-State 67 conflicts: 2 shift/reduce
-State 68 conflicts: 2 shift/reduce
-State 69 conflicts: 2 shift/reduce
-State 76 conflicts: 9 shift/reduce
-State 79 conflicts: 1 reduce/reduce
-State 86 conflicts: 9 shift/reduce
+State 38 conflicts: 1 shift/reduce
+State 67 conflicts: 10 shift/reduce
+State 71 conflicts: 10 shift/reduce
+State 72 conflicts: 3 shift/reduce
+State 73 conflicts: 3 shift/reduce
+State 74 conflicts: 3 shift/reduce
+State 75 conflicts: 3 shift/reduce
+State 76 conflicts: 3 shift/reduce
+State 77 conflicts: 3 shift/reduce
+State 78 conflicts: 3 shift/reduce
+State 86 conflicts: 10 shift/reduce
+State 95 conflicts: 10 shift/reduce
 
 
 Grammar
@@ -109,117 +101,129 @@ Grammar
    34            | STRING
    35            | BOOLEAN
    36            | IDENTIFIER
-   37            | expressions '+' expressions
-   38            | expressions '-' expressions
-   39            | expressions '*' expressions
-   40            | expressions '/' expressions
-   41            | expressions '^' expressions
-   42            | expressions EQ expressions
-   43            | expressions ASSIGN expressions
-   44            | expressions '>' expressions
-   45            | expressions '<' expressions
-   46            | LPARENTHESES expressions RPARENTHESES
-   47            | LPARENTHESES parameter_list RPARENTHESES ARROW expressions
-   48            | LPARENTHESES RPARENTHESES ARROW expressions
-   49            | LPARENTHESES array_elements RPARENTHESES
+   37            | array
+   38            | array_map
+   39            | expressions '+' expressions
+   40            | expressions '-' expressions
+   41            | expressions '*' expressions
+   42            | expressions '/' expressions
+   43            | expressions '^' expressions
+   44            | expressions EQ expressions
+   45            | expressions ASSIGN expressions
+   46            | expressions '>' expressions
+   47            | expressions '<' expressions
+   48            | RBRACKET expressions LBRACKET
+   49            | LPARENTHESES expressions RPARENTHESES
+   50            | LPARENTHESES array_elements RPARENTHESES ARROW expressions
+   51            | LPARENTHESES RPARENTHESES ARROW expressions
+   52            | LPARENTHESES array_elements RPARENTHESES
 
-   50 array_elements: expressions
-   51               | expressions COMMA array_elements
+   53 array_map: expressions DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+   54 array: LBRACKET array_elements RBRACKET
+
+   55 array_elements: expressions
+   56               | expressions COMMA array_elements
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'*' (42) 39
-'+' (43) 37
-'-' (45) 38
-'/' (47) 40
-'<' (60) 45
+'*' (42) 41
+'+' (43) 39
+'-' (45) 40
+'/' (47) 42
+'<' (60) 47
 '=' (61)
-'>' (62) 44
-'^' (94) 41
+'>' (62) 46
+'^' (94) 43
 error (256)
 LET (258) 12
 COLON (259)
 NUMBER_TYPE (260)
 STRING_TYPE (261)
-ASSIGN (262) 12 13 43
+ASSIGN (262) 12 13 45
 SEMICOLON (263) 5 22 23 24
 BOOLEAN_TYPE (264)
 CLASS_IDENTIFIER (265)
 IF (266) 28
 ELSE (267) 30
-IDENTIFIER (268) 12 13 14 36
-NUMBER (269) 32
-FLOAT (270) 33
-STRING (271) 34
-TRUE (272)
-FALSE (273)
-CONSOLE_LOG (274) 22
-CONST (275) 13
-RETURN (276) 24 25
-FUNCTION (277) 14
-BOOLEAN (278) 35
-ERROR (279)
-LBRACKET (280)
-RBRACKET (281)
-LBRACE (282) 14 28 30
-RBRACE (283) 14 28 30
-LPARENTHESES (284) 14 18 22 28 46 47 48 49
-RPARENTHESES (285) 14 18 22 28 46 47 48 49
-COMMA (286) 16 20 51
-SINGLE_QUOTE (287)
-DOT (288)
-DOUBLE_QUOTE (289)
-EXP (290)
-EQ (291) 42
-BACKTICK (292)
-DOLLAR (293)
-ARROW (294) 47 48
+MAP (268) 53
+IDENTIFIER (269) 12 13 14 36 53
+NUMBER (270) 32
+FLOAT (271) 33
+STRING (272) 34
+TRUE (273)
+FALSE (274)
+CONSOLE_LOG (275) 22
+CONST (276) 13
+RETURN (277) 24 25
+FUNCTION (278) 14
+BOOLEAN (279) 35
+ERROR (280)
+LBRACKET (281) 48 54
+RBRACKET (282) 48 54
+LBRACE (283) 14 28 30
+RBRACE (284) 14 28 30
+LPARENTHESES (285) 14 18 22 28 49 50 51 52 53
+RPARENTHESES (286) 14 18 22 28 49 50 51 52 53
+COMMA (287) 16 20 56
+SINGLE_QUOTE (288)
+DOT (289) 53
+DOUBLE_QUOTE (290)
+EXP (291)
+EQ (292) 44
+BACKTICK (293)
+DOLLAR (294)
+ARROW (295) 50 51 53
 
 
 Nonterminals, with rules where they appear
 
-$accept (48)
+$accept (49)
     on left: 0
-begin (49)
+begin (50)
     on left: 1, on right: 0
-statements (50)
+statements (51)
     on left: 2 3, on right: 1 2 14 28 30
-statement (51)
+statement (52)
     on left: 4 5 6 7 8 9 10 11, on right: 2
-variable_declaration (52)
+variable_declaration (53)
     on left: 12 13, on right: 4 5
-function_declaration (53)
+function_declaration (54)
     on left: 14, on right: 6
-parameter_list (54)
-    on left: 15 16 17, on right: 14 47
-function_call (55)
+parameter_list (55)
+    on left: 15 16 17, on right: 14
+function_call (56)
     on left: 18, on right: 7
-argument_list (56)
+argument_list (57)
     on left: 19 20 21, on right: 18 20
-console_log (57)
+console_log (58)
     on left: 22, on right: 8
-expression_statement (58)
+expression_statement (59)
     on left: 23, on right: 9
-return_statement (59)
+return_statement (60)
     on left: 24 25, on right: 10
-if_statement (60)
+if_statement (61)
     on left: 28, on right: 11
-$@1 (61)
+$@1 (62)
     on left: 26, on right: 28
-$@2 (62)
+$@2 (63)
     on left: 27, on right: 28
-else_declaration (63)
+else_declaration (64)
     on left: 30 31, on right: 28
-$@3 (64)
+$@3 (65)
     on left: 29, on right: 30
-expressions (65)
-    on left: 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49,
-    on right: 12 13 15 16 18 19 20 22 23 24 25 28 37 38 39 40 41 42
-    43 44 45 46 47 48 50 51
-array_elements (66)
-    on left: 50 51, on right: 16 49 51
+expressions (66)
+    on left: 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
+    50 51 52, on right: 12 13 15 16 18 19 20 22 23 24 25 28 39 40 41
+    42 43 44 45 46 47 48 49 50 51 53 55 56
+array_map (67)
+    on left: 53, on right: 38
+array (68)
+    on left: 54, on right: 37
+array_elements (69)
+    on left: 55 56, on right: 16 50 52 54 56
 
 
 State 0
@@ -237,35 +241,39 @@ State 0
     RETURN        shift, and go to state 9
     FUNCTION      shift, and go to state 10
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 3 (statements)
 
-    begin                 go to state 13
-    statements            go to state 14
-    statement             go to state 15
-    variable_declaration  go to state 16
-    function_declaration  go to state 17
-    function_call         go to state 18
-    console_log           go to state 19
-    expression_statement  go to state 20
-    return_statement      go to state 21
-    if_statement          go to state 22
-    expressions           go to state 23
+    begin                 go to state 15
+    statements            go to state 16
+    statement             go to state 17
+    variable_declaration  go to state 18
+    function_declaration  go to state 19
+    function_call         go to state 20
+    console_log           go to state 21
+    expression_statement  go to state 22
+    return_statement      go to state 23
+    if_statement          go to state 24
+    expressions           go to state 25
+    array_map             go to state 26
+    array                 go to state 27
 
 
 State 1
 
    12 variable_declaration: LET . IDENTIFIER ASSIGN expressions
 
-    IDENTIFIER  shift, and go to state 24
+    IDENTIFIER  shift, and go to state 28
 
 
 State 2
 
    28 if_statement: IF . LPARENTHESES expressions RPARENTHESES LBRACE $@1 statements RBRACE $@2 else_declaration
 
-    LPARENTHESES  shift, and go to state 25
+    LPARENTHESES  shift, and go to state 29
 
 
 State 3
@@ -300,14 +308,14 @@ State 7
 
    22 console_log: CONSOLE_LOG . LPARENTHESES expressions RPARENTHESES SEMICOLON
 
-    LPARENTHESES  shift, and go to state 26
+    LPARENTHESES  shift, and go to state 30
 
 
 State 8
 
    13 variable_declaration: CONST . IDENTIFIER ASSIGN expressions
 
-    IDENTIFIER  shift, and go to state 27
+    IDENTIFIER  shift, and go to state 31
 
 
 State 9
@@ -320,16 +328,20 @@ State 9
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 28
+    expressions  go to state 32
+    array_map    go to state 26
+    array        go to state 27
 
 
 State 10
 
    14 function_declaration: FUNCTION . IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
 
-    IDENTIFIER  shift, and go to state 29
+    IDENTIFIER  shift, and go to state 33
 
 
 State 11
@@ -341,41 +353,79 @@ State 11
 
 State 12
 
-   46 expressions: LPARENTHESES . expressions RPARENTHESES
-   47            | LPARENTHESES . parameter_list RPARENTHESES ARROW expressions
-   48            | LPARENTHESES . RPARENTHESES ARROW expressions
-   49            | LPARENTHESES . array_elements RPARENTHESES
+   54 array: LBRACKET . array_elements RBRACKET
 
     IDENTIFIER    shift, and go to state 3
     NUMBER        shift, and go to state 4
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-    RPARENTHESES  shift, and go to state 30
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    RPARENTHESES  [reduce using rule 17 (parameter_list)]
-
-    parameter_list  go to state 31
-    expressions     go to state 32
-    array_elements  go to state 33
+    expressions     go to state 34
+    array_map       go to state 26
+    array           go to state 27
+    array_elements  go to state 35
 
 
 State 13
 
-    0 $accept: begin . $end
+   48 expressions: RBRACKET . expressions LBRACKET
 
-    $end  shift, and go to state 34
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 36
+    array_map    go to state 26
+    array        go to state 27
 
 
 State 14
+
+   49 expressions: LPARENTHESES . expressions RPARENTHESES
+   50            | LPARENTHESES . array_elements RPARENTHESES ARROW expressions
+   51            | LPARENTHESES . RPARENTHESES ARROW expressions
+   52            | LPARENTHESES . array_elements RPARENTHESES
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+    RPARENTHESES  shift, and go to state 37
+
+    expressions     go to state 38
+    array_map       go to state 26
+    array           go to state 27
+    array_elements  go to state 39
+
+
+State 15
+
+    0 $accept: begin . $end
+
+    $end  shift, and go to state 40
+
+
+State 16
 
     1 begin: statements .
 
     $default  reduce using rule 1 (begin)
 
 
-State 15
+State 17
 
     2 statements: statement . statements
 
@@ -390,109 +440,129 @@ State 15
     RETURN        shift, and go to state 9
     FUNCTION      shift, and go to state 10
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 3 (statements)
 
-    statements            go to state 35
-    statement             go to state 15
-    variable_declaration  go to state 16
-    function_declaration  go to state 17
-    function_call         go to state 18
-    console_log           go to state 19
-    expression_statement  go to state 20
-    return_statement      go to state 21
-    if_statement          go to state 22
-    expressions           go to state 23
+    statements            go to state 41
+    statement             go to state 17
+    variable_declaration  go to state 18
+    function_declaration  go to state 19
+    function_call         go to state 20
+    console_log           go to state 21
+    expression_statement  go to state 22
+    return_statement      go to state 23
+    if_statement          go to state 24
+    expressions           go to state 25
+    array_map             go to state 26
+    array                 go to state 27
 
 
-State 16
+State 18
 
     4 statement: variable_declaration .
     5          | variable_declaration . SEMICOLON
 
-    SEMICOLON  shift, and go to state 36
+    SEMICOLON  shift, and go to state 42
 
     $default  reduce using rule 4 (statement)
 
 
-State 17
+State 19
 
     6 statement: function_declaration .
 
     $default  reduce using rule 6 (statement)
 
 
-State 18
+State 20
 
     7 statement: function_call .
 
     $default  reduce using rule 7 (statement)
 
 
-State 19
+State 21
 
     8 statement: console_log .
 
     $default  reduce using rule 8 (statement)
 
 
-State 20
+State 22
 
     9 statement: expression_statement .
 
     $default  reduce using rule 9 (statement)
 
 
-State 21
+State 23
 
    10 statement: return_statement .
 
     $default  reduce using rule 10 (statement)
 
 
-State 22
+State 24
 
    11 statement: if_statement .
 
     $default  reduce using rule 11 (statement)
 
 
-State 23
+State 25
 
    18 function_call: expressions . LPARENTHESES argument_list RPARENTHESES
    23 expression_statement: expressions . SEMICOLON
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    ASSIGN        shift, and go to state 37
-    SEMICOLON     shift, and go to state 38
-    LPARENTHESES  shift, and go to state 39
-    EQ            shift, and go to state 40
-    '-'           shift, and go to state 41
-    '+'           shift, and go to state 42
-    '*'           shift, and go to state 43
-    '/'           shift, and go to state 44
-    '^'           shift, and go to state 45
-    '>'           shift, and go to state 46
-    '<'           shift, and go to state 47
+    ASSIGN        shift, and go to state 43
+    SEMICOLON     shift, and go to state 44
+    LPARENTHESES  shift, and go to state 45
+    DOT           shift, and go to state 46
+    EQ            shift, and go to state 47
+    '-'           shift, and go to state 48
+    '+'           shift, and go to state 49
+    '*'           shift, and go to state 50
+    '/'           shift, and go to state 51
+    '^'           shift, and go to state 52
+    '>'           shift, and go to state 53
+    '<'           shift, and go to state 54
 
 
-State 24
+State 26
+
+   38 expressions: array_map .
+
+    $default  reduce using rule 38 (expressions)
+
+
+State 27
+
+   37 expressions: array .
+
+    $default  reduce using rule 37 (expressions)
+
+
+State 28
 
    12 variable_declaration: LET IDENTIFIER . ASSIGN expressions
 
-    ASSIGN  shift, and go to state 48
+    ASSIGN  shift, and go to state 55
 
 
-State 25
+State 29
 
    28 if_statement: IF LPARENTHESES . expressions RPARENTHESES LBRACE $@1 statements RBRACE $@2 else_declaration
 
@@ -501,12 +571,16 @@ State 25
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 49
+    expressions  go to state 56
+    array_map    go to state 26
+    array        go to state 27
 
 
-State 26
+State 30
 
    22 console_log: CONSOLE_LOG LPARENTHESES . expressions RPARENTHESES SEMICOLON
 
@@ -515,150 +589,217 @@ State 26
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 50
-
-
-State 27
-
-   13 variable_declaration: CONST IDENTIFIER . ASSIGN expressions
-
-    ASSIGN  shift, and go to state 51
-
-
-State 28
-
-   24 return_statement: RETURN expressions . SEMICOLON
-   25                 | RETURN expressions .
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN     shift, and go to state 37
-    SEMICOLON  shift, and go to state 52
-    EQ         shift, and go to state 40
-    '-'        shift, and go to state 41
-    '+'        shift, and go to state 42
-    '*'        shift, and go to state 43
-    '/'        shift, and go to state 44
-    '^'        shift, and go to state 45
-    '>'        shift, and go to state 46
-    '<'        shift, and go to state 47
-
-    $default  reduce using rule 25 (return_statement)
-
-
-State 29
-
-   14 function_declaration: FUNCTION IDENTIFIER . LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
-
-    LPARENTHESES  shift, and go to state 53
-
-
-State 30
-
-   48 expressions: LPARENTHESES RPARENTHESES . ARROW expressions
-
-    ARROW  shift, and go to state 54
+    expressions  go to state 57
+    array_map    go to state 26
+    array        go to state 27
 
 
 State 31
 
-   47 expressions: LPARENTHESES parameter_list . RPARENTHESES ARROW expressions
+   13 variable_declaration: CONST IDENTIFIER . ASSIGN expressions
 
-    RPARENTHESES  shift, and go to state 55
+    ASSIGN  shift, and go to state 58
 
 
 State 32
 
-   15 parameter_list: expressions .
-   16               | expressions . COMMA array_elements
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-   46            | LPARENTHESES expressions . RPARENTHESES
-   50 array_elements: expressions .
-   51               | expressions . COMMA array_elements
+   24 return_statement: RETURN expressions . SEMICOLON
+   25                 | RETURN expressions .
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    ASSIGN        shift, and go to state 37
-    RPARENTHESES  shift, and go to state 56
-    COMMA         shift, and go to state 57
-    EQ            shift, and go to state 40
-    '-'           shift, and go to state 41
-    '+'           shift, and go to state 42
-    '*'           shift, and go to state 43
-    '/'           shift, and go to state 44
-    '^'           shift, and go to state 45
-    '>'           shift, and go to state 46
-    '<'           shift, and go to state 47
+    ASSIGN     shift, and go to state 43
+    SEMICOLON  shift, and go to state 59
+    DOT        shift, and go to state 46
+    EQ         shift, and go to state 47
+    '-'        shift, and go to state 48
+    '+'        shift, and go to state 49
+    '*'        shift, and go to state 50
+    '/'        shift, and go to state 51
+    '^'        shift, and go to state 52
+    '>'        shift, and go to state 53
+    '<'        shift, and go to state 54
 
-    RPARENTHESES  [reduce using rule 15 (parameter_list)]
-    RPARENTHESES  [reduce using rule 50 (array_elements)]
+    $default  reduce using rule 25 (return_statement)
 
 
 State 33
 
-   49 expressions: LPARENTHESES array_elements . RPARENTHESES
+   14 function_declaration: FUNCTION IDENTIFIER . LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
 
-    RPARENTHESES  shift, and go to state 58
+    LPARENTHESES  shift, and go to state 60
 
 
 State 34
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+   55 array_elements: expressions .
+   56               | expressions . COMMA array_elements
+
+    ASSIGN  shift, and go to state 43
+    COMMA   shift, and go to state 61
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    $default  reduce using rule 55 (array_elements)
+
+
+State 35
+
+   54 array: LBRACKET array_elements . RBRACKET
+
+    RBRACKET  shift, and go to state 62
+
+
+State 36
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   48            | RBRACKET expressions . LBRACKET
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN    shift, and go to state 43
+    LBRACKET  shift, and go to state 63
+    DOT       shift, and go to state 46
+    EQ        shift, and go to state 47
+    '-'       shift, and go to state 48
+    '+'       shift, and go to state 49
+    '*'       shift, and go to state 50
+    '/'       shift, and go to state 51
+    '^'       shift, and go to state 52
+    '>'       shift, and go to state 53
+    '<'       shift, and go to state 54
+
+
+State 37
+
+   51 expressions: LPARENTHESES RPARENTHESES . ARROW expressions
+
+    ARROW  shift, and go to state 64
+
+
+State 38
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   49            | LPARENTHESES expressions . RPARENTHESES
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+   55 array_elements: expressions .
+   56               | expressions . COMMA array_elements
+
+    ASSIGN        shift, and go to state 43
+    RPARENTHESES  shift, and go to state 65
+    COMMA         shift, and go to state 61
+    DOT           shift, and go to state 46
+    EQ            shift, and go to state 47
+    '-'           shift, and go to state 48
+    '+'           shift, and go to state 49
+    '*'           shift, and go to state 50
+    '/'           shift, and go to state 51
+    '^'           shift, and go to state 52
+    '>'           shift, and go to state 53
+    '<'           shift, and go to state 54
+
+    RPARENTHESES  [reduce using rule 55 (array_elements)]
+
+
+State 39
+
+   50 expressions: LPARENTHESES array_elements . RPARENTHESES ARROW expressions
+   52            | LPARENTHESES array_elements . RPARENTHESES
+
+    RPARENTHESES  shift, and go to state 66
+
+
+State 40
 
     0 $accept: begin $end .
 
     $default  accept
 
 
-State 35
+State 41
 
     2 statements: statement statements .
 
     $default  reduce using rule 2 (statements)
 
 
-State 36
+State 42
 
     5 statement: variable_declaration SEMICOLON .
 
     $default  reduce using rule 5 (statement)
 
 
-State 37
+State 43
 
-   43 expressions: expressions ASSIGN . expressions
+   45 expressions: expressions ASSIGN . expressions
 
     IDENTIFIER    shift, and go to state 3
     NUMBER        shift, and go to state 4
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 59
+    expressions  go to state 67
+    array_map    go to state 26
+    array        go to state 27
 
 
-State 38
+State 44
 
    23 expression_statement: expressions SEMICOLON .
 
     $default  reduce using rule 23 (expression_statement)
 
 
-State 39
+State 45
 
    18 function_call: expressions LPARENTHESES . argument_list RPARENTHESES
 
@@ -667,127 +808,170 @@ State 39
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 21 (argument_list)
 
-    argument_list  go to state 60
-    expressions    go to state 61
-
-
-State 40
-
-   42 expressions: expressions EQ . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 62
-
-
-State 41
-
-   38 expressions: expressions '-' . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 63
-
-
-State 42
-
-   37 expressions: expressions '+' . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 64
-
-
-State 43
-
-   39 expressions: expressions '*' . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 65
-
-
-State 44
-
-   40 expressions: expressions '/' . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 66
-
-
-State 45
-
-   41 expressions: expressions '^' . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 67
+    argument_list  go to state 68
+    expressions    go to state 69
+    array_map      go to state 26
+    array          go to state 27
 
 
 State 46
 
-   44 expressions: expressions '>' . expressions
+   53 array_map: expressions DOT . MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 68
+    MAP  shift, and go to state 70
 
 
 State 47
 
-   45 expressions: expressions '<' . expressions
+   44 expressions: expressions EQ . expressions
 
     IDENTIFIER    shift, and go to state 3
     NUMBER        shift, and go to state 4
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 69
+    expressions  go to state 71
+    array_map    go to state 26
+    array        go to state 27
 
 
 State 48
+
+   40 expressions: expressions '-' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 72
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 49
+
+   39 expressions: expressions '+' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 73
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 50
+
+   41 expressions: expressions '*' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 74
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 51
+
+   42 expressions: expressions '/' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 75
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 52
+
+   43 expressions: expressions '^' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 76
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 53
+
+   46 expressions: expressions '>' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 77
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 54
+
+   47 expressions: expressions '<' . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 78
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 55
 
    12 variable_declaration: LET IDENTIFIER ASSIGN . expressions
 
@@ -796,62 +980,70 @@ State 48
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 70
+    expressions  go to state 79
+    array_map    go to state 26
+    array        go to state 27
 
 
-State 49
+State 56
 
    28 if_statement: IF LPARENTHESES expressions . RPARENTHESES LBRACE $@1 statements RBRACE $@2 else_declaration
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    ASSIGN        shift, and go to state 37
-    RPARENTHESES  shift, and go to state 71
-    EQ            shift, and go to state 40
-    '-'           shift, and go to state 41
-    '+'           shift, and go to state 42
-    '*'           shift, and go to state 43
-    '/'           shift, and go to state 44
-    '^'           shift, and go to state 45
-    '>'           shift, and go to state 46
-    '<'           shift, and go to state 47
+    ASSIGN        shift, and go to state 43
+    RPARENTHESES  shift, and go to state 80
+    DOT           shift, and go to state 46
+    EQ            shift, and go to state 47
+    '-'           shift, and go to state 48
+    '+'           shift, and go to state 49
+    '*'           shift, and go to state 50
+    '/'           shift, and go to state 51
+    '^'           shift, and go to state 52
+    '>'           shift, and go to state 53
+    '<'           shift, and go to state 54
 
 
-State 50
+State 57
 
    22 console_log: CONSOLE_LOG LPARENTHESES expressions . RPARENTHESES SEMICOLON
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    ASSIGN        shift, and go to state 37
-    RPARENTHESES  shift, and go to state 72
-    EQ            shift, and go to state 40
-    '-'           shift, and go to state 41
-    '+'           shift, and go to state 42
-    '*'           shift, and go to state 43
-    '/'           shift, and go to state 44
-    '^'           shift, and go to state 45
-    '>'           shift, and go to state 46
-    '<'           shift, and go to state 47
+    ASSIGN        shift, and go to state 43
+    RPARENTHESES  shift, and go to state 81
+    DOT           shift, and go to state 46
+    EQ            shift, and go to state 47
+    '-'           shift, and go to state 48
+    '+'           shift, and go to state 49
+    '*'           shift, and go to state 50
+    '/'           shift, and go to state 51
+    '^'           shift, and go to state 52
+    '>'           shift, and go to state 53
+    '<'           shift, and go to state 54
 
 
-State 51
+State 58
 
    13 variable_declaration: CONST IDENTIFIER ASSIGN . expressions
 
@@ -860,19 +1052,23 @@ State 51
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions  go to state 73
+    expressions  go to state 82
+    array_map    go to state 26
+    array        go to state 27
 
 
-State 52
+State 59
 
    24 return_statement: RETURN expressions SEMICOLON .
 
     $default  reduce using rule 24 (return_statement)
 
 
-State 53
+State 60
 
    14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES . parameter_list RPARENTHESES LBRACE statements RBRACE
 
@@ -881,532 +1077,571 @@ State 53
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 17 (parameter_list)
 
-    parameter_list  go to state 74
-    expressions     go to state 75
-
-
-State 54
-
-   48 expressions: LPARENTHESES RPARENTHESES ARROW . expressions
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions  go to state 76
-
-
-State 55
-
-   47 expressions: LPARENTHESES parameter_list RPARENTHESES . ARROW expressions
-
-    ARROW  shift, and go to state 77
-
-
-State 56
-
-   46 expressions: LPARENTHESES expressions RPARENTHESES .
-
-    $default  reduce using rule 46 (expressions)
-
-
-State 57
-
-   16 parameter_list: expressions COMMA . array_elements
-   51 array_elements: expressions COMMA . array_elements
-
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
-
-    expressions     go to state 78
-    array_elements  go to state 79
-
-
-State 58
-
-   49 expressions: LPARENTHESES array_elements RPARENTHESES .
-
-    $default  reduce using rule 49 (expressions)
-
-
-State 59
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   43            | expressions ASSIGN expressions .
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 43 (expressions)]
-    EQ        [reduce using rule 43 (expressions)]
-    '-'       [reduce using rule 43 (expressions)]
-    '+'       [reduce using rule 43 (expressions)]
-    '*'       [reduce using rule 43 (expressions)]
-    '/'       [reduce using rule 43 (expressions)]
-    '^'       [reduce using rule 43 (expressions)]
-    '>'       [reduce using rule 43 (expressions)]
-    '<'       [reduce using rule 43 (expressions)]
-    $default  reduce using rule 43 (expressions)
-
-
-State 60
-
-   18 function_call: expressions LPARENTHESES argument_list . RPARENTHESES
-
-    RPARENTHESES  shift, and go to state 80
+    parameter_list  go to state 83
+    expressions     go to state 84
+    array_map       go to state 26
+    array           go to state 27
 
 
 State 61
 
-   19 argument_list: expressions .
-   20              | expressions . COMMA argument_list
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    COMMA   shift, and go to state 81
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    $default  reduce using rule 19 (argument_list)
-
-
-State 62
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   42            | expressions EQ expressions .
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 42 (expressions)]
-    EQ        [reduce using rule 42 (expressions)]
-    '-'       [reduce using rule 42 (expressions)]
-    '+'       [reduce using rule 42 (expressions)]
-    '*'       [reduce using rule 42 (expressions)]
-    '/'       [reduce using rule 42 (expressions)]
-    '^'       [reduce using rule 42 (expressions)]
-    '>'       [reduce using rule 42 (expressions)]
-    '<'       [reduce using rule 42 (expressions)]
-    $default  reduce using rule 42 (expressions)
-
-
-State 63
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   38            | expressions '-' expressions .
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 38 (expressions)]
-    EQ        [reduce using rule 38 (expressions)]
-    $default  reduce using rule 38 (expressions)
-
-
-State 64
-
-   37 expressions: expressions . '+' expressions
-   37            | expressions '+' expressions .
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 37 (expressions)]
-    EQ        [reduce using rule 37 (expressions)]
-    $default  reduce using rule 37 (expressions)
-
-
-State 65
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   39            | expressions '*' expressions .
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 39 (expressions)]
-    EQ        [reduce using rule 39 (expressions)]
-    $default  reduce using rule 39 (expressions)
-
-
-State 66
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   40            | expressions '/' expressions .
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 40 (expressions)]
-    EQ        [reduce using rule 40 (expressions)]
-    $default  reduce using rule 40 (expressions)
-
-
-State 67
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   41            | expressions '^' expressions .
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 41 (expressions)]
-    EQ        [reduce using rule 41 (expressions)]
-    $default  reduce using rule 41 (expressions)
-
-
-State 68
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   44            | expressions '>' expressions .
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-
-    ASSIGN    [reduce using rule 44 (expressions)]
-    EQ        [reduce using rule 44 (expressions)]
-    $default  reduce using rule 44 (expressions)
-
-
-State 69
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-   45            | expressions '<' expressions .
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-
-    ASSIGN    [reduce using rule 45 (expressions)]
-    EQ        [reduce using rule 45 (expressions)]
-    $default  reduce using rule 45 (expressions)
-
-
-State 70
-
-   12 variable_declaration: LET IDENTIFIER ASSIGN expressions .
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    $default  reduce using rule 12 (variable_declaration)
-
-
-State 71
-
-   28 if_statement: IF LPARENTHESES expressions RPARENTHESES . LBRACE $@1 statements RBRACE $@2 else_declaration
-
-    LBRACE  shift, and go to state 82
-
-
-State 72
-
-   22 console_log: CONSOLE_LOG LPARENTHESES expressions RPARENTHESES . SEMICOLON
-
-    SEMICOLON  shift, and go to state 83
-
-
-State 73
-
-   13 variable_declaration: CONST IDENTIFIER ASSIGN expressions .
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    $default  reduce using rule 13 (variable_declaration)
-
-
-State 74
-
-   14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list . RPARENTHESES LBRACE statements RBRACE
-
-    RPARENTHESES  shift, and go to state 84
-
-
-State 75
-
-   15 parameter_list: expressions .
-   16               | expressions . COMMA array_elements
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-
-    ASSIGN  shift, and go to state 37
-    COMMA   shift, and go to state 85
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    $default  reduce using rule 15 (parameter_list)
-
-
-State 76
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-   48            | LPARENTHESES RPARENTHESES ARROW expressions .
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 48 (expressions)]
-    EQ        [reduce using rule 48 (expressions)]
-    '-'       [reduce using rule 48 (expressions)]
-    '+'       [reduce using rule 48 (expressions)]
-    '*'       [reduce using rule 48 (expressions)]
-    '/'       [reduce using rule 48 (expressions)]
-    '^'       [reduce using rule 48 (expressions)]
-    '>'       [reduce using rule 48 (expressions)]
-    '<'       [reduce using rule 48 (expressions)]
-    $default  reduce using rule 48 (expressions)
-
-
-State 77
-
-   47 expressions: LPARENTHESES parameter_list RPARENTHESES ARROW . expressions
+   56 array_elements: expressions COMMA . array_elements
 
     IDENTIFIER    shift, and go to state 3
     NUMBER        shift, and go to state 4
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions     go to state 34
+    array_map       go to state 26
+    array           go to state 27
+    array_elements  go to state 85
+
+
+State 62
+
+   54 array: LBRACKET array_elements RBRACKET .
+
+    $default  reduce using rule 54 (array)
+
+
+State 63
+
+   48 expressions: RBRACKET expressions LBRACKET .
+
+    $default  reduce using rule 48 (expressions)
+
+
+State 64
+
+   51 expressions: LPARENTHESES RPARENTHESES ARROW . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     expressions  go to state 86
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 65
+
+   49 expressions: LPARENTHESES expressions RPARENTHESES .
+
+    $default  reduce using rule 49 (expressions)
+
+
+State 66
+
+   50 expressions: LPARENTHESES array_elements RPARENTHESES . ARROW expressions
+   52            | LPARENTHESES array_elements RPARENTHESES .
+
+    ARROW  shift, and go to state 87
+
+    $default  reduce using rule 52 (expressions)
+
+
+State 67
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   45            | expressions ASSIGN expressions .
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 45 (expressions)]
+    DOT       [reduce using rule 45 (expressions)]
+    EQ        [reduce using rule 45 (expressions)]
+    '-'       [reduce using rule 45 (expressions)]
+    '+'       [reduce using rule 45 (expressions)]
+    '*'       [reduce using rule 45 (expressions)]
+    '/'       [reduce using rule 45 (expressions)]
+    '^'       [reduce using rule 45 (expressions)]
+    '>'       [reduce using rule 45 (expressions)]
+    '<'       [reduce using rule 45 (expressions)]
+    $default  reduce using rule 45 (expressions)
+
+
+State 68
+
+   18 function_call: expressions LPARENTHESES argument_list . RPARENTHESES
+
+    RPARENTHESES  shift, and go to state 88
+
+
+State 69
+
+   19 argument_list: expressions .
+   20              | expressions . COMMA argument_list
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    COMMA   shift, and go to state 89
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    $default  reduce using rule 19 (argument_list)
+
+
+State 70
+
+   53 array_map: expressions DOT MAP . LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    LPARENTHESES  shift, and go to state 90
+
+
+State 71
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   44            | expressions EQ expressions .
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 44 (expressions)]
+    DOT       [reduce using rule 44 (expressions)]
+    EQ        [reduce using rule 44 (expressions)]
+    '-'       [reduce using rule 44 (expressions)]
+    '+'       [reduce using rule 44 (expressions)]
+    '*'       [reduce using rule 44 (expressions)]
+    '/'       [reduce using rule 44 (expressions)]
+    '^'       [reduce using rule 44 (expressions)]
+    '>'       [reduce using rule 44 (expressions)]
+    '<'       [reduce using rule 44 (expressions)]
+    $default  reduce using rule 44 (expressions)
+
+
+State 72
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   40            | expressions '-' expressions .
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 40 (expressions)]
+    DOT       [reduce using rule 40 (expressions)]
+    EQ        [reduce using rule 40 (expressions)]
+    $default  reduce using rule 40 (expressions)
+
+
+State 73
+
+   39 expressions: expressions . '+' expressions
+   39            | expressions '+' expressions .
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 39 (expressions)]
+    DOT       [reduce using rule 39 (expressions)]
+    EQ        [reduce using rule 39 (expressions)]
+    $default  reduce using rule 39 (expressions)
+
+
+State 74
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   41            | expressions '*' expressions .
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 41 (expressions)]
+    DOT       [reduce using rule 41 (expressions)]
+    EQ        [reduce using rule 41 (expressions)]
+    $default  reduce using rule 41 (expressions)
+
+
+State 75
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   42            | expressions '/' expressions .
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 42 (expressions)]
+    DOT       [reduce using rule 42 (expressions)]
+    EQ        [reduce using rule 42 (expressions)]
+    $default  reduce using rule 42 (expressions)
+
+
+State 76
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   43            | expressions '^' expressions .
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 43 (expressions)]
+    DOT       [reduce using rule 43 (expressions)]
+    EQ        [reduce using rule 43 (expressions)]
+    $default  reduce using rule 43 (expressions)
+
+
+State 77
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   46            | expressions '>' expressions .
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+
+    ASSIGN    [reduce using rule 46 (expressions)]
+    DOT       [reduce using rule 46 (expressions)]
+    EQ        [reduce using rule 46 (expressions)]
+    $default  reduce using rule 46 (expressions)
 
 
 State 78
 
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-   50 array_elements: expressions .
-   51               | expressions . COMMA array_elements
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   47            | expressions '<' expressions .
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    ASSIGN  shift, and go to state 37
-    COMMA   shift, and go to state 87
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
 
-    $default  reduce using rule 50 (array_elements)
+    ASSIGN    [reduce using rule 47 (expressions)]
+    DOT       [reduce using rule 47 (expressions)]
+    EQ        [reduce using rule 47 (expressions)]
+    $default  reduce using rule 47 (expressions)
 
 
 State 79
 
-   16 parameter_list: expressions COMMA array_elements .
-   51 array_elements: expressions COMMA array_elements .
+   12 variable_declaration: LET IDENTIFIER ASSIGN expressions .
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    RPARENTHESES  reduce using rule 16 (parameter_list)
-    RPARENTHESES  [reduce using rule 51 (array_elements)]
-    $default      reduce using rule 16 (parameter_list)
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    $default  reduce using rule 12 (variable_declaration)
 
 
 State 80
+
+   28 if_statement: IF LPARENTHESES expressions RPARENTHESES . LBRACE $@1 statements RBRACE $@2 else_declaration
+
+    LBRACE  shift, and go to state 91
+
+
+State 81
+
+   22 console_log: CONSOLE_LOG LPARENTHESES expressions RPARENTHESES . SEMICOLON
+
+    SEMICOLON  shift, and go to state 92
+
+
+State 82
+
+   13 variable_declaration: CONST IDENTIFIER ASSIGN expressions .
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    $default  reduce using rule 13 (variable_declaration)
+
+
+State 83
+
+   14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list . RPARENTHESES LBRACE statements RBRACE
+
+    RPARENTHESES  shift, and go to state 93
+
+
+State 84
+
+   15 parameter_list: expressions .
+   16               | expressions . COMMA array_elements
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    COMMA   shift, and go to state 94
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    $default  reduce using rule 15 (parameter_list)
+
+
+State 85
+
+   56 array_elements: expressions COMMA array_elements .
+
+    $default  reduce using rule 56 (array_elements)
+
+
+State 86
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   51            | LPARENTHESES RPARENTHESES ARROW expressions .
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
+
+    ASSIGN    [reduce using rule 51 (expressions)]
+    DOT       [reduce using rule 51 (expressions)]
+    EQ        [reduce using rule 51 (expressions)]
+    '-'       [reduce using rule 51 (expressions)]
+    '+'       [reduce using rule 51 (expressions)]
+    '*'       [reduce using rule 51 (expressions)]
+    '/'       [reduce using rule 51 (expressions)]
+    '^'       [reduce using rule 51 (expressions)]
+    '>'       [reduce using rule 51 (expressions)]
+    '<'       [reduce using rule 51 (expressions)]
+    $default  reduce using rule 51 (expressions)
+
+
+State 87
+
+   50 expressions: LPARENTHESES array_elements RPARENTHESES ARROW . expressions
+
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 95
+    array_map    go to state 26
+    array        go to state 27
+
+
+State 88
 
    18 function_call: expressions LPARENTHESES argument_list RPARENTHESES .
 
     $default  reduce using rule 18 (function_call)
 
 
-State 81
+State 89
 
    20 argument_list: expressions COMMA . argument_list
 
@@ -1415,38 +1650,49 @@ State 81
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 21 (argument_list)
 
-    argument_list  go to state 88
-    expressions    go to state 61
+    argument_list  go to state 96
+    expressions    go to state 69
+    array_map      go to state 26
+    array          go to state 27
 
 
-State 82
+State 90
+
+   53 array_map: expressions DOT MAP LPARENTHESES . IDENTIFIER ARROW expressions RPARENTHESES
+
+    IDENTIFIER  shift, and go to state 97
+
+
+State 91
 
    28 if_statement: IF LPARENTHESES expressions RPARENTHESES LBRACE . $@1 statements RBRACE $@2 else_declaration
 
     $default  reduce using rule 26 ($@1)
 
-    $@1  go to state 89
+    $@1  go to state 98
 
 
-State 83
+State 92
 
    22 console_log: CONSOLE_LOG LPARENTHESES expressions RPARENTHESES SEMICOLON .
 
     $default  reduce using rule 22 (console_log)
 
 
-State 84
+State 93
 
    14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES . LBRACE statements RBRACE
 
-    LBRACE  shift, and go to state 90
+    LBRACE  shift, and go to state 99
 
 
-State 85
+State 94
 
    16 parameter_list: expressions COMMA . array_elements
 
@@ -1455,70 +1701,69 @@ State 85
     FLOAT         shift, and go to state 5
     STRING        shift, and go to state 6
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
-    expressions     go to state 78
-    array_elements  go to state 91
-
-
-State 86
-
-   37 expressions: expressions . '+' expressions
-   38            | expressions . '-' expressions
-   39            | expressions . '*' expressions
-   40            | expressions . '/' expressions
-   41            | expressions . '^' expressions
-   42            | expressions . EQ expressions
-   43            | expressions . ASSIGN expressions
-   44            | expressions . '>' expressions
-   45            | expressions . '<' expressions
-   47            | LPARENTHESES parameter_list RPARENTHESES ARROW expressions .
-
-    ASSIGN  shift, and go to state 37
-    EQ      shift, and go to state 40
-    '-'     shift, and go to state 41
-    '+'     shift, and go to state 42
-    '*'     shift, and go to state 43
-    '/'     shift, and go to state 44
-    '^'     shift, and go to state 45
-    '>'     shift, and go to state 46
-    '<'     shift, and go to state 47
-
-    ASSIGN    [reduce using rule 47 (expressions)]
-    EQ        [reduce using rule 47 (expressions)]
-    '-'       [reduce using rule 47 (expressions)]
-    '+'       [reduce using rule 47 (expressions)]
-    '*'       [reduce using rule 47 (expressions)]
-    '/'       [reduce using rule 47 (expressions)]
-    '^'       [reduce using rule 47 (expressions)]
-    '>'       [reduce using rule 47 (expressions)]
-    '<'       [reduce using rule 47 (expressions)]
-    $default  reduce using rule 47 (expressions)
+    expressions     go to state 34
+    array_map       go to state 26
+    array           go to state 27
+    array_elements  go to state 100
 
 
-State 87
+State 95
 
-   51 array_elements: expressions COMMA . array_elements
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   50            | LPARENTHESES array_elements RPARENTHESES ARROW expressions .
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
 
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    ASSIGN  shift, and go to state 43
+    DOT     shift, and go to state 46
+    EQ      shift, and go to state 47
+    '-'     shift, and go to state 48
+    '+'     shift, and go to state 49
+    '*'     shift, and go to state 50
+    '/'     shift, and go to state 51
+    '^'     shift, and go to state 52
+    '>'     shift, and go to state 53
+    '<'     shift, and go to state 54
 
-    expressions     go to state 78
-    array_elements  go to state 92
+    ASSIGN    [reduce using rule 50 (expressions)]
+    DOT       [reduce using rule 50 (expressions)]
+    EQ        [reduce using rule 50 (expressions)]
+    '-'       [reduce using rule 50 (expressions)]
+    '+'       [reduce using rule 50 (expressions)]
+    '*'       [reduce using rule 50 (expressions)]
+    '/'       [reduce using rule 50 (expressions)]
+    '^'       [reduce using rule 50 (expressions)]
+    '>'       [reduce using rule 50 (expressions)]
+    '<'       [reduce using rule 50 (expressions)]
+    $default  reduce using rule 50 (expressions)
 
 
-State 88
+State 96
 
    20 argument_list: expressions COMMA argument_list .
 
     $default  reduce using rule 20 (argument_list)
 
 
-State 89
+State 97
+
+   53 array_map: expressions DOT MAP LPARENTHESES IDENTIFIER . ARROW expressions RPARENTHESES
+
+    ARROW  shift, and go to state 101
+
+
+State 98
 
    28 if_statement: IF LPARENTHESES expressions RPARENTHESES LBRACE $@1 . statements RBRACE $@2 else_declaration
 
@@ -1533,23 +1778,27 @@ State 89
     RETURN        shift, and go to state 9
     FUNCTION      shift, and go to state 10
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 3 (statements)
 
-    statements            go to state 93
-    statement             go to state 15
-    variable_declaration  go to state 16
-    function_declaration  go to state 17
-    function_call         go to state 18
-    console_log           go to state 19
-    expression_statement  go to state 20
-    return_statement      go to state 21
-    if_statement          go to state 22
-    expressions           go to state 23
+    statements            go to state 102
+    statement             go to state 17
+    variable_declaration  go to state 18
+    function_declaration  go to state 19
+    function_call         go to state 20
+    console_log           go to state 21
+    expression_statement  go to state 22
+    return_statement      go to state 23
+    if_statement          go to state 24
+    expressions           go to state 25
+    array_map             go to state 26
+    array                 go to state 27
 
 
-State 90
+State 99
 
    14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE . statements RBRACE
 
@@ -1564,101 +1813,150 @@ State 90
     RETURN        shift, and go to state 9
     FUNCTION      shift, and go to state 10
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 3 (statements)
 
-    statements            go to state 94
-    statement             go to state 15
-    variable_declaration  go to state 16
-    function_declaration  go to state 17
-    function_call         go to state 18
-    console_log           go to state 19
-    expression_statement  go to state 20
-    return_statement      go to state 21
-    if_statement          go to state 22
-    expressions           go to state 23
+    statements            go to state 103
+    statement             go to state 17
+    variable_declaration  go to state 18
+    function_declaration  go to state 19
+    function_call         go to state 20
+    console_log           go to state 21
+    expression_statement  go to state 22
+    return_statement      go to state 23
+    if_statement          go to state 24
+    expressions           go to state 25
+    array_map             go to state 26
+    array                 go to state 27
 
 
-State 91
+State 100
 
    16 parameter_list: expressions COMMA array_elements .
 
     $default  reduce using rule 16 (parameter_list)
 
 
-State 92
+State 101
 
-   51 array_elements: expressions COMMA array_elements .
+   53 array_map: expressions DOT MAP LPARENTHESES IDENTIFIER ARROW . expressions RPARENTHESES
 
-    $default  reduce using rule 51 (array_elements)
+    IDENTIFIER    shift, and go to state 3
+    NUMBER        shift, and go to state 4
+    FLOAT         shift, and go to state 5
+    STRING        shift, and go to state 6
+    BOOLEAN       shift, and go to state 11
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
+
+    expressions  go to state 104
+    array_map    go to state 26
+    array        go to state 27
 
 
-State 93
+State 102
 
    28 if_statement: IF LPARENTHESES expressions RPARENTHESES LBRACE $@1 statements . RBRACE $@2 else_declaration
 
-    RBRACE  shift, and go to state 95
+    RBRACE  shift, and go to state 105
 
 
-State 94
+State 103
 
    14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements . RBRACE
 
-    RBRACE  shift, and go to state 96
+    RBRACE  shift, and go to state 106
 
 
-State 95
+State 104
+
+   39 expressions: expressions . '+' expressions
+   40            | expressions . '-' expressions
+   41            | expressions . '*' expressions
+   42            | expressions . '/' expressions
+   43            | expressions . '^' expressions
+   44            | expressions . EQ expressions
+   45            | expressions . ASSIGN expressions
+   46            | expressions . '>' expressions
+   47            | expressions . '<' expressions
+   53 array_map: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+   53          | expressions DOT MAP LPARENTHESES IDENTIFIER ARROW expressions . RPARENTHESES
+
+    ASSIGN        shift, and go to state 43
+    RPARENTHESES  shift, and go to state 107
+    DOT           shift, and go to state 46
+    EQ            shift, and go to state 47
+    '-'           shift, and go to state 48
+    '+'           shift, and go to state 49
+    '*'           shift, and go to state 50
+    '/'           shift, and go to state 51
+    '^'           shift, and go to state 52
+    '>'           shift, and go to state 53
+    '<'           shift, and go to state 54
+
+
+State 105
 
    28 if_statement: IF LPARENTHESES expressions RPARENTHESES LBRACE $@1 statements RBRACE . $@2 else_declaration
 
     $default  reduce using rule 27 ($@2)
 
-    $@2  go to state 97
+    $@2  go to state 108
 
 
-State 96
+State 106
 
    14 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE .
 
     $default  reduce using rule 14 (function_declaration)
 
 
-State 97
+State 107
+
+   53 array_map: expressions DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES .
+
+    $default  reduce using rule 53 (array_map)
+
+
+State 108
 
    28 if_statement: IF LPARENTHESES expressions RPARENTHESES LBRACE $@1 statements RBRACE $@2 . else_declaration
 
-    ELSE  shift, and go to state 98
+    ELSE  shift, and go to state 109
 
     $default  reduce using rule 31 (else_declaration)
 
-    else_declaration  go to state 99
+    else_declaration  go to state 110
 
 
-State 98
+State 109
 
    30 else_declaration: ELSE . LBRACE $@3 statements RBRACE statements RBRACE
 
-    LBRACE  shift, and go to state 100
+    LBRACE  shift, and go to state 111
 
 
-State 99
+State 110
 
    28 if_statement: IF LPARENTHESES expressions RPARENTHESES LBRACE $@1 statements RBRACE $@2 else_declaration .
 
     $default  reduce using rule 28 (if_statement)
 
 
-State 100
+State 111
 
    30 else_declaration: ELSE LBRACE . $@3 statements RBRACE statements RBRACE
 
     $default  reduce using rule 29 ($@3)
 
-    $@3  go to state 101
+    $@3  go to state 112
 
 
-State 101
+State 112
 
    30 else_declaration: ELSE LBRACE $@3 . statements RBRACE statements RBRACE
 
@@ -1673,30 +1971,34 @@ State 101
     RETURN        shift, and go to state 9
     FUNCTION      shift, and go to state 10
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 3 (statements)
 
-    statements            go to state 102
-    statement             go to state 15
-    variable_declaration  go to state 16
-    function_declaration  go to state 17
-    function_call         go to state 18
-    console_log           go to state 19
-    expression_statement  go to state 20
-    return_statement      go to state 21
-    if_statement          go to state 22
-    expressions           go to state 23
+    statements            go to state 113
+    statement             go to state 17
+    variable_declaration  go to state 18
+    function_declaration  go to state 19
+    function_call         go to state 20
+    console_log           go to state 21
+    expression_statement  go to state 22
+    return_statement      go to state 23
+    if_statement          go to state 24
+    expressions           go to state 25
+    array_map             go to state 26
+    array                 go to state 27
 
 
-State 102
+State 113
 
    30 else_declaration: ELSE LBRACE $@3 statements . RBRACE statements RBRACE
 
-    RBRACE  shift, and go to state 103
+    RBRACE  shift, and go to state 114
 
 
-State 103
+State 114
 
    30 else_declaration: ELSE LBRACE $@3 statements RBRACE . statements RBRACE
 
@@ -1711,30 +2013,34 @@ State 103
     RETURN        shift, and go to state 9
     FUNCTION      shift, and go to state 10
     BOOLEAN       shift, and go to state 11
-    LPARENTHESES  shift, and go to state 12
+    LBRACKET      shift, and go to state 12
+    RBRACKET      shift, and go to state 13
+    LPARENTHESES  shift, and go to state 14
 
     $default  reduce using rule 3 (statements)
 
-    statements            go to state 104
-    statement             go to state 15
-    variable_declaration  go to state 16
-    function_declaration  go to state 17
-    function_call         go to state 18
-    console_log           go to state 19
-    expression_statement  go to state 20
-    return_statement      go to state 21
-    if_statement          go to state 22
-    expressions           go to state 23
+    statements            go to state 115
+    statement             go to state 17
+    variable_declaration  go to state 18
+    function_declaration  go to state 19
+    function_call         go to state 20
+    console_log           go to state 21
+    expression_statement  go to state 22
+    return_statement      go to state 23
+    if_statement          go to state 24
+    expressions           go to state 25
+    array_map             go to state 26
+    array                 go to state 27
 
 
-State 104
+State 115
 
    30 else_declaration: ELSE LBRACE $@3 statements RBRACE statements . RBRACE
 
-    RBRACE  shift, and go to state 105
+    RBRACE  shift, and go to state 116
 
 
-State 105
+State 116
 
    30 else_declaration: ELSE LBRACE $@3 statements RBRACE statements RBRACE .
 
