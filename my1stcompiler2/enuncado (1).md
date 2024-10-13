@@ -85,7 +85,7 @@ async function fetchData() {
 ```
 Go:
 ```go
-func fetchData(url string) (data map[string]interface{}, err error) {
+func fetchData(url) (data map[any]interface{}, err error) {
     resp, err := http.Get(url)
     if err != nil {
         return nil, err

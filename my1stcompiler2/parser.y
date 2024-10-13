@@ -53,7 +53,7 @@
 %right '^'
 %left '>' '<' '='
 
-%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements array_manipulate async_function console_arguments
+%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements array_manipulate async_function console_arguments wait_expression
 
 %%
 begin : 
@@ -74,6 +74,7 @@ statement:
     | expression_statement
     | return_statement
     | if_statement
+    | function_call
 ;
 
 variable_declaration:
@@ -88,17 +89,17 @@ function_declaration:
 parameter_list:
     expressions
     | expressions COMMA array_elements { asprintf(&$$, "%s, %s", $1, $3); }
-    | /* empty */ { $$ = strdup(""); }
+    | /* empty */
 ;
 
 function_call:
-    expressions LPARENTHESES array_elements RPARENTHESES { fprintf(output, "%s(%s)", $1, $3); }
+    expressions LPARENTHESES argument_list RPARENTHESES { fprintf(output, "%s(%s)", $1, $3); }
 ;
 
 argument_list:
     expressions
     | expressions COMMA argument_list
-    | /* empty */ { $$ = strdup(""); }
+    | /* empty */
 ;
 
 console_log:
@@ -108,9 +109,7 @@ console_log:
 
 
 console_arguments:
-
     expressions { $$ = strdup($1); }
-
     | expressions COMMA console_arguments { asprintf(&$$, "%s, %s", $1, $3); }
 
 ;
@@ -120,7 +119,7 @@ expression_statement:
 ;
 
 return_statement:
-    RETURN expressions SEMICOLON
+    RETURN expressions SEMICOLON { fprintf(output, "return %s\n", $2); }
     | RETURN expressions
 ;
 
@@ -142,7 +141,6 @@ expressions:
     | IDENTIFIER { $$ = strdup(yytext); }
     | array { $$ = strdup($1); }
     | array_manipulate
-    | function_call
     | expressions '+' expressions { asprintf(&$$, "%s + %s", $1, $3); }
     | expressions '-' expressions { asprintf(&$$, "%s - %s", $1, $3); }
     | expressions '*' expressions { asprintf(&$$, "%s * %s", $1, $3); }
@@ -156,8 +154,13 @@ expressions:
     | LPARENTHESES expressions RPARENTHESES { asprintf(&$$, "(%s)", $2); }
     | LPARENTHESES array_elements RPARENTHESES ARROW expressions { asprintf(&$$, "func(%s) {\n\treturn %s\n}", $2, $5); }
     | LPARENTHESES RPARENTHESES ARROW expressions { asprintf(&$$, "func() {\n\treturn %s\n}", $4); }
-    | LPARENTHESES array_elements RPARENTHESES { fprintf(output, "(%s)", $2); }  
-    | AWAIT expressions { asprintf(&$$, "await %s", $2); }
+    | LPARENTHESES array_elements RPARENTHESES { fprintf(output, "(%s)", $2); } 
+    | wait_expression
+;
+
+wait_expression:
+    AWAIT IDENTIFIER expressions
+    | AWAIT IDENTIFIER DOT IDENTIFIER
 ;
 
 array_manipulate:
@@ -167,9 +170,13 @@ array_manipulate:
 ;
 
 async_function:
-    ASYNC FUNCTION expressions LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE {
-        fprintf(output, "func %s(%s) {\n", $3, $5);
-        fprintf(output, "%s\n", $8);
+    ASYNC FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE {
+        fprintf(output, "func %s(%s string) (data map[any]interface{}, err error) {\n", $3, $5);
+        fprintf(output, "\tresp, err := http.Get(%s)\n", $5);
+        fprintf(output, "\tif err != nil {\n\t\treturn nil, err\n\t}\n");
+        fprintf(output, "\tdefer resp.Body.Close()\n");
+        fprintf(output, "\terr = json.NewDecoder(resp.Body).Decode(&data)\n");
+        fprintf(output, "\treturn data, err\n");
         fprintf(output, "}\n");
     }
 ;

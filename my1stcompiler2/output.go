@@ -34,9 +34,29 @@ for i, n := range numbers {
 	doubled[i] = n * 2
 }
 
-soma(3, 4)
-fmt.Println(result)
 
 
 
-fetch(url)response := await fetch
+
+
+func fetchData(numbers string) (data map[any]interface{}, err error) {
+	resp, err := http.Get(numbers)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	return data, err
+}
+
+
+
+
+
+
+
+
+
+
+
+
