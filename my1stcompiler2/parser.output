@@ -1,0 +1,852 @@
+Nonterminals useless in grammar
+
+   interpolated_expression
+   interpolated_part
+   array
+   array_elements
+
+
+Terminals unused in grammar
+
+   COLON
+   NUMBER_TYPE
+   STRING_TYPE
+   BOOLEAN_TYPE
+   CLASS_IDENTIFIER
+   TRUE
+   FALSE
+   ERROR
+   LBRACKET
+   RBRACKET
+   SINGLE_QUOTE
+   DOT
+   DOUBLE_QUOTE
+   EXP
+   GT
+   LT
+   EQ
+   BACKTICK
+   DOLLAR
+   '^'
+   '>'
+   '<'
+   '='
+
+
+Rules useless in grammar
+
+   35 interpolated_expression: interpolated_part
+   36                        | interpolated_expression interpolated_part
+
+   37 interpolated_part: STRING
+   38                  | DOLLAR LBRACE expression RBRACE
+
+   39 array: LBRACKET array_elements RBRACKET
+
+   40 array_elements: expression
+   41               | expression COMMA array_elements
+
+
+Grammar
+
+    0 $accept: begin $end
+
+    1 begin: statements
+
+    2 statements: statement statements
+    3           | %empty
+
+    4 statement: variable_declaration
+    5          | variable_declaration SEMICOLON
+    6          | function_declaration
+    7          | function_call
+    8          | console_log
+    9          | expression_statement
+   10          | return_statement
+
+   11 variable_declaration: LET IDENTIFIER ASSIGN expression
+   12                     | CONST IDENTIFIER ASSIGN expression
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
+
+   14 parameter_list: IDENTIFIER
+   15               | IDENTIFIER COMMA parameter_list
+   16               | %empty
+
+   17 function_call: IDENTIFIER LPARENTHESES argument_list RPARENTHESES SEMICOLON
+   18              | IDENTIFIER LPARENTHESES argument_list RPARENTHESES
+
+   19 argument_list: expression
+   20              | expression COMMA argument_list
+   21              | %empty
+
+   22 console_log: CONSOLE_LOG LPARENTHESES expression RPARENTHESES SEMICOLON
+
+   23 expression_statement: expression SEMICOLON
+
+   24 return_statement: RETURN expression SEMICOLON
+   25                 | RETURN expression
+
+   26 expression: NUMBER
+   27           | FLOAT
+   28           | STRING
+   29           | BOOLEAN
+   30           | IDENTIFIER
+   31           | expression '+' expression
+   32           | expression '-' expression
+   33           | expression '*' expression
+   34           | expression '/' expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'*' (42) 33
+'+' (43) 31
+'-' (45) 32
+'/' (47) 34
+'<' (60)
+'=' (61)
+'>' (62)
+'^' (94)
+error (256)
+LET (258) 11
+COLON (259)
+NUMBER_TYPE (260)
+STRING_TYPE (261)
+ASSIGN (262) 11 12
+SEMICOLON (263) 5 17 22 23 24
+BOOLEAN_TYPE (264)
+CLASS_IDENTIFIER (265)
+IDENTIFIER (266) 11 12 13 14 15 17 18 30
+NUMBER (267) 26
+FLOAT (268) 27
+STRING (269) 28
+TRUE (270)
+FALSE (271)
+CONSOLE_LOG (272) 22
+CONST (273) 12
+RETURN (274) 24 25
+FUNCTION (275) 13
+BOOLEAN (276) 29
+ERROR (277)
+LBRACKET (278)
+RBRACKET (279)
+LBRACE (280) 13
+RBRACE (281) 13
+LPARENTHESES (282) 13 17 18 22
+RPARENTHESES (283) 13 17 18 22
+COMMA (284) 15 20
+SINGLE_QUOTE (285)
+DOT (286)
+DOUBLE_QUOTE (287)
+EXP (288)
+GT (289)
+LT (290)
+EQ (291)
+BACKTICK (292)
+DOLLAR (293)
+
+
+Nonterminals, with rules where they appear
+
+$accept (47)
+    on left: 0
+begin (48)
+    on left: 1, on right: 0
+statements (49)
+    on left: 2 3, on right: 1 2 13
+statement (50)
+    on left: 4 5 6 7 8 9 10, on right: 2
+variable_declaration (51)
+    on left: 11 12, on right: 4 5
+function_declaration (52)
+    on left: 13, on right: 6
+parameter_list (53)
+    on left: 14 15 16, on right: 13 15
+function_call (54)
+    on left: 17 18, on right: 7
+argument_list (55)
+    on left: 19 20 21, on right: 17 18 20
+console_log (56)
+    on left: 22, on right: 8
+expression_statement (57)
+    on left: 23, on right: 9
+return_statement (58)
+    on left: 24 25, on right: 10
+expression (59)
+    on left: 26 27 28 29 30 31 32 33 34, on right: 11 12 19 20 22 23
+    24 25 31 32 33 34
+
+
+State 0
+
+    0 $accept: . begin $end
+
+    LET          shift, and go to state 1
+    IDENTIFIER   shift, and go to state 2
+    NUMBER       shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    STRING       shift, and go to state 5
+    CONSOLE_LOG  shift, and go to state 6
+    CONST        shift, and go to state 7
+    RETURN       shift, and go to state 8
+    FUNCTION     shift, and go to state 9
+    BOOLEAN      shift, and go to state 10
+
+    $default  reduce using rule 3 (statements)
+
+    begin                 go to state 11
+    statements            go to state 12
+    statement             go to state 13
+    variable_declaration  go to state 14
+    function_declaration  go to state 15
+    function_call         go to state 16
+    console_log           go to state 17
+    expression_statement  go to state 18
+    return_statement      go to state 19
+    expression            go to state 20
+
+
+State 1
+
+   11 variable_declaration: LET . IDENTIFIER ASSIGN expression
+
+    IDENTIFIER  shift, and go to state 21
+
+
+State 2
+
+   17 function_call: IDENTIFIER . LPARENTHESES argument_list RPARENTHESES SEMICOLON
+   18              | IDENTIFIER . LPARENTHESES argument_list RPARENTHESES
+   30 expression: IDENTIFIER .
+
+    LPARENTHESES  shift, and go to state 22
+
+    $default  reduce using rule 30 (expression)
+
+
+State 3
+
+   26 expression: NUMBER .
+
+    $default  reduce using rule 26 (expression)
+
+
+State 4
+
+   27 expression: FLOAT .
+
+    $default  reduce using rule 27 (expression)
+
+
+State 5
+
+   28 expression: STRING .
+
+    $default  reduce using rule 28 (expression)
+
+
+State 6
+
+   22 console_log: CONSOLE_LOG . LPARENTHESES expression RPARENTHESES SEMICOLON
+
+    LPARENTHESES  shift, and go to state 23
+
+
+State 7
+
+   12 variable_declaration: CONST . IDENTIFIER ASSIGN expression
+
+    IDENTIFIER  shift, and go to state 24
+
+
+State 8
+
+   24 return_statement: RETURN . expression SEMICOLON
+   25                 | RETURN . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 26
+
+
+State 9
+
+   13 function_declaration: FUNCTION . IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
+
+    IDENTIFIER  shift, and go to state 27
+
+
+State 10
+
+   29 expression: BOOLEAN .
+
+    $default  reduce using rule 29 (expression)
+
+
+State 11
+
+    0 $accept: begin . $end
+
+    $end  shift, and go to state 28
+
+
+State 12
+
+    1 begin: statements .
+
+    $default  reduce using rule 1 (begin)
+
+
+State 13
+
+    2 statements: statement . statements
+
+    LET          shift, and go to state 1
+    IDENTIFIER   shift, and go to state 2
+    NUMBER       shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    STRING       shift, and go to state 5
+    CONSOLE_LOG  shift, and go to state 6
+    CONST        shift, and go to state 7
+    RETURN       shift, and go to state 8
+    FUNCTION     shift, and go to state 9
+    BOOLEAN      shift, and go to state 10
+
+    $default  reduce using rule 3 (statements)
+
+    statements            go to state 29
+    statement             go to state 13
+    variable_declaration  go to state 14
+    function_declaration  go to state 15
+    function_call         go to state 16
+    console_log           go to state 17
+    expression_statement  go to state 18
+    return_statement      go to state 19
+    expression            go to state 20
+
+
+State 14
+
+    4 statement: variable_declaration .
+    5          | variable_declaration . SEMICOLON
+
+    SEMICOLON  shift, and go to state 30
+
+    $default  reduce using rule 4 (statement)
+
+
+State 15
+
+    6 statement: function_declaration .
+
+    $default  reduce using rule 6 (statement)
+
+
+State 16
+
+    7 statement: function_call .
+
+    $default  reduce using rule 7 (statement)
+
+
+State 17
+
+    8 statement: console_log .
+
+    $default  reduce using rule 8 (statement)
+
+
+State 18
+
+    9 statement: expression_statement .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 19
+
+   10 statement: return_statement .
+
+    $default  reduce using rule 10 (statement)
+
+
+State 20
+
+   23 expression_statement: expression . SEMICOLON
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    SEMICOLON  shift, and go to state 31
+    '-'        shift, and go to state 32
+    '+'        shift, and go to state 33
+    '*'        shift, and go to state 34
+    '/'        shift, and go to state 35
+
+
+State 21
+
+   11 variable_declaration: LET IDENTIFIER . ASSIGN expression
+
+    ASSIGN  shift, and go to state 36
+
+
+State 22
+
+   17 function_call: IDENTIFIER LPARENTHESES . argument_list RPARENTHESES SEMICOLON
+   18              | IDENTIFIER LPARENTHESES . argument_list RPARENTHESES
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    $default  reduce using rule 21 (argument_list)
+
+    argument_list  go to state 37
+    expression     go to state 38
+
+
+State 23
+
+   22 console_log: CONSOLE_LOG LPARENTHESES . expression RPARENTHESES SEMICOLON
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 39
+
+
+State 24
+
+   12 variable_declaration: CONST IDENTIFIER . ASSIGN expression
+
+    ASSIGN  shift, and go to state 40
+
+
+State 25
+
+   30 expression: IDENTIFIER .
+
+    $default  reduce using rule 30 (expression)
+
+
+State 26
+
+   24 return_statement: RETURN expression . SEMICOLON
+   25                 | RETURN expression .
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    SEMICOLON  shift, and go to state 41
+    '-'        shift, and go to state 32
+    '+'        shift, and go to state 33
+    '*'        shift, and go to state 34
+    '/'        shift, and go to state 35
+
+    $default  reduce using rule 25 (return_statement)
+
+
+State 27
+
+   13 function_declaration: FUNCTION IDENTIFIER . LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
+
+    LPARENTHESES  shift, and go to state 42
+
+
+State 28
+
+    0 $accept: begin $end .
+
+    $default  accept
+
+
+State 29
+
+    2 statements: statement statements .
+
+    $default  reduce using rule 2 (statements)
+
+
+State 30
+
+    5 statement: variable_declaration SEMICOLON .
+
+    $default  reduce using rule 5 (statement)
+
+
+State 31
+
+   23 expression_statement: expression SEMICOLON .
+
+    $default  reduce using rule 23 (expression_statement)
+
+
+State 32
+
+   32 expression: expression '-' . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 43
+
+
+State 33
+
+   31 expression: expression '+' . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 44
+
+
+State 34
+
+   33 expression: expression '*' . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 45
+
+
+State 35
+
+   34 expression: expression '/' . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 46
+
+
+State 36
+
+   11 variable_declaration: LET IDENTIFIER ASSIGN . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 47
+
+
+State 37
+
+   17 function_call: IDENTIFIER LPARENTHESES argument_list . RPARENTHESES SEMICOLON
+   18              | IDENTIFIER LPARENTHESES argument_list . RPARENTHESES
+
+    RPARENTHESES  shift, and go to state 48
+
+
+State 38
+
+   19 argument_list: expression .
+   20              | expression . COMMA argument_list
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    COMMA  shift, and go to state 49
+    '-'    shift, and go to state 32
+    '+'    shift, and go to state 33
+    '*'    shift, and go to state 34
+    '/'    shift, and go to state 35
+
+    $default  reduce using rule 19 (argument_list)
+
+
+State 39
+
+   22 console_log: CONSOLE_LOG LPARENTHESES expression . RPARENTHESES SEMICOLON
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    RPARENTHESES  shift, and go to state 50
+    '-'           shift, and go to state 32
+    '+'           shift, and go to state 33
+    '*'           shift, and go to state 34
+    '/'           shift, and go to state 35
+
+
+State 40
+
+   12 variable_declaration: CONST IDENTIFIER ASSIGN . expression
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    expression  go to state 51
+
+
+State 41
+
+   24 return_statement: RETURN expression SEMICOLON .
+
+    $default  reduce using rule 24 (return_statement)
+
+
+State 42
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES . parameter_list RPARENTHESES LBRACE statements RBRACE
+
+    IDENTIFIER  shift, and go to state 52
+
+    $default  reduce using rule 16 (parameter_list)
+
+    parameter_list  go to state 53
+
+
+State 43
+
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   32           | expression '-' expression .
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    '*'  shift, and go to state 34
+    '/'  shift, and go to state 35
+
+    $default  reduce using rule 32 (expression)
+
+
+State 44
+
+   31 expression: expression . '+' expression
+   31           | expression '+' expression .
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    '*'  shift, and go to state 34
+    '/'  shift, and go to state 35
+
+    $default  reduce using rule 31 (expression)
+
+
+State 45
+
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   33           | expression '*' expression .
+   34           | expression . '/' expression
+
+    $default  reduce using rule 33 (expression)
+
+
+State 46
+
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+   34           | expression '/' expression .
+
+    $default  reduce using rule 34 (expression)
+
+
+State 47
+
+   11 variable_declaration: LET IDENTIFIER ASSIGN expression .
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    '-'  shift, and go to state 32
+    '+'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '/'  shift, and go to state 35
+
+    $default  reduce using rule 11 (variable_declaration)
+
+
+State 48
+
+   17 function_call: IDENTIFIER LPARENTHESES argument_list RPARENTHESES . SEMICOLON
+   18              | IDENTIFIER LPARENTHESES argument_list RPARENTHESES .
+
+    SEMICOLON  shift, and go to state 54
+
+    $default  reduce using rule 18 (function_call)
+
+
+State 49
+
+   20 argument_list: expression COMMA . argument_list
+
+    IDENTIFIER  shift, and go to state 25
+    NUMBER      shift, and go to state 3
+    FLOAT       shift, and go to state 4
+    STRING      shift, and go to state 5
+    BOOLEAN     shift, and go to state 10
+
+    $default  reduce using rule 21 (argument_list)
+
+    argument_list  go to state 55
+    expression     go to state 38
+
+
+State 50
+
+   22 console_log: CONSOLE_LOG LPARENTHESES expression RPARENTHESES . SEMICOLON
+
+    SEMICOLON  shift, and go to state 56
+
+
+State 51
+
+   12 variable_declaration: CONST IDENTIFIER ASSIGN expression .
+   31 expression: expression . '+' expression
+   32           | expression . '-' expression
+   33           | expression . '*' expression
+   34           | expression . '/' expression
+
+    '-'  shift, and go to state 32
+    '+'  shift, and go to state 33
+    '*'  shift, and go to state 34
+    '/'  shift, and go to state 35
+
+    $default  reduce using rule 12 (variable_declaration)
+
+
+State 52
+
+   14 parameter_list: IDENTIFIER .
+   15               | IDENTIFIER . COMMA parameter_list
+
+    COMMA  shift, and go to state 57
+
+    $default  reduce using rule 14 (parameter_list)
+
+
+State 53
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list . RPARENTHESES LBRACE statements RBRACE
+
+    RPARENTHESES  shift, and go to state 58
+
+
+State 54
+
+   17 function_call: IDENTIFIER LPARENTHESES argument_list RPARENTHESES SEMICOLON .
+
+    $default  reduce using rule 17 (function_call)
+
+
+State 55
+
+   20 argument_list: expression COMMA argument_list .
+
+    $default  reduce using rule 20 (argument_list)
+
+
+State 56
+
+   22 console_log: CONSOLE_LOG LPARENTHESES expression RPARENTHESES SEMICOLON .
+
+    $default  reduce using rule 22 (console_log)
+
+
+State 57
+
+   15 parameter_list: IDENTIFIER COMMA . parameter_list
+
+    IDENTIFIER  shift, and go to state 52
+
+    $default  reduce using rule 16 (parameter_list)
+
+    parameter_list  go to state 59
+
+
+State 58
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES . LBRACE statements RBRACE
+
+    LBRACE  shift, and go to state 60
+
+
+State 59
+
+   15 parameter_list: IDENTIFIER COMMA parameter_list .
+
+    $default  reduce using rule 15 (parameter_list)
+
+
+State 60
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE . statements RBRACE
+
+    LET          shift, and go to state 1
+    IDENTIFIER   shift, and go to state 2
+    NUMBER       shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    STRING       shift, and go to state 5
+    CONSOLE_LOG  shift, and go to state 6
+    CONST        shift, and go to state 7
+    RETURN       shift, and go to state 8
+    FUNCTION     shift, and go to state 9
+    BOOLEAN      shift, and go to state 10
+
+    $default  reduce using rule 3 (statements)
+
+    statements            go to state 61
+    statement             go to state 13
+    variable_declaration  go to state 14
+    function_declaration  go to state 15
+    function_call         go to state 16
+    console_log           go to state 17
+    expression_statement  go to state 18
+    return_statement      go to state 19
+    expression            go to state 20
+
+
+State 61
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements . RBRACE
+
+    RBRACE  shift, and go to state 62
+
+
+State 62
+
+   13 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE .
+
+    $default  reduce using rule 13 (function_declaration)

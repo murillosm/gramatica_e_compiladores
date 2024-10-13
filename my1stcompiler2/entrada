@@ -1,0 +1,39 @@
+let w = 100;
+let x = 2.0;
+let nome = "João";
+let f = 1.5;
+
+
+const g = 7;
+const h = 'medeiros';
+const i = 3.4;
+
+let j = 5 + 5 + 5;
+
+// function somar(a, b) {
+//     return a + b;
+// }
+
+// let resultado = somar(5, 3);
+
+// console.log("O resultado da soma é: " + resultado);
+
+// let arr = [1, 2, 3];
+
+// function pessoa(nome, sobrenome) {
+//     return nome + " " + sobrenome;
+// }
+
+// let nome_completo = pessoa("Murillo", "Medeiros");
+
+// function animal(nome, idade) {
+//     return `O ${nome} tem ${idade} anos.`;
+// }
+
+// let animal_info = animal("Cachorro", 5);
+
+// console.log(animal_info);
+
+// function erro(){
+//     return "Erro";
+// }
