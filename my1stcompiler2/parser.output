@@ -1,9 +1,3 @@
-Nonterminals useless in grammar
-
-   interpolated_expression
-   interpolated_part
-
-
 Terminals unused in grammar
 
    COLON
@@ -20,15 +14,6 @@ Terminals unused in grammar
    BACKTICK
    DOLLAR
    '='
-
-
-Rules useless in grammar
-
-   64 interpolated_expression: interpolated_part
-   65                        | interpolated_expression interpolated_part
-
-   66 interpolated_part: STRING
-   67                  | DOLLAR LBRACE expressions RBRACE
 
 
 State 42 conflicts: 1 shift/reduce
@@ -70,8 +55,8 @@ Grammar
 
    15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
 
-   16 parameter_list: expressions
-   17               | expressions COMMA array_elements
+   16 parameter_list: IDENTIFIER
+   17               | IDENTIFIER COMMA parameter_list
    18               | %empty
 
    19 function_call: expressions LPARENTHESES argument_list RPARENTHESES
@@ -98,7 +83,7 @@ Grammar
 
    32 $@3: %empty
 
-   33 else_declaration: ELSE LBRACE $@3 statements RBRACE statements RBRACE
+   33 else_declaration: ELSE LBRACE $@3 statements RBRACE
    34                 | %empty
 
    35 expressions: NUMBER
@@ -160,7 +145,7 @@ CLASS_IDENTIFIER (265)
 IF (266) 31
 ELSE (267) 33
 MAP (268) 59
-IDENTIFIER (269) 13 14 15 39 57 58 59 60
+IDENTIFIER (269) 13 14 15 16 17 39 57 58 59 60
 NUMBER (270) 35
 FLOAT (271) 36
 STRING (272) 37
@@ -206,7 +191,7 @@ variable_declaration (55)
 function_declaration (56)
     on left: 15, on right: 6
 parameter_list (57)
-    on left: 16 17 18, on right: 15 60
+    on left: 16 17 18, on right: 15 17 60
 function_call (58)
     on left: 19, on right: 12
 argument_list (59)
@@ -231,8 +216,8 @@ $@3 (68)
     on left: 32, on right: 33
 expressions (69)
     on left: 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52
-    53 54 55 56, on right: 13 14 16 17 19 20 21 24 25 26 27 28 31 42
-    43 44 45 46 47 48 49 50 51 52 53 54 57 59 62 63
+    53 54 55 56, on right: 13 14 19 20 21 24 25 26 27 28 31 42 43 44
+    45 46 47 48 49 50 51 52 53 54 57 59 62 63
 wait_expression (70)
     on left: 57 58, on right: 56
 array_manipulate (71)
@@ -242,7 +227,7 @@ async_function (72)
 array (73)
     on left: 61, on right: 40
 array_elements (74)
-    on left: 62 63, on right: 17 53 55 61 63
+    on left: 62 63, on right: 53 55 61 63
 
 
 State 0
@@ -1204,23 +1189,11 @@ State 67
 
    15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES . parameter_list RPARENTHESES LBRACE statements RBRACE
 
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LBRACKET      shift, and go to state 12
-    RBRACKET      shift, and go to state 13
-    LPARENTHESES  shift, and go to state 14
-    AWAIT         shift, and go to state 16
+    IDENTIFIER  shift, and go to state 94
 
     $default  reduce using rule 18 (parameter_list)
 
-    parameter_list    go to state 94
-    expressions       go to state 95
-    wait_expression   go to state 28
-    array_manipulate  go to state 29
-    array             go to state 31
+    parameter_list  go to state 95
 
 
 State 68
@@ -1747,39 +1720,19 @@ State 93
 
 State 94
 
-   15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list . RPARENTHESES LBRACE statements RBRACE
+   16 parameter_list: IDENTIFIER .
+   17               | IDENTIFIER . COMMA parameter_list
 
-    RPARENTHESES  shift, and go to state 107
+    COMMA  shift, and go to state 107
+
+    $default  reduce using rule 16 (parameter_list)
 
 
 State 95
 
-   16 parameter_list: expressions .
-   17               | expressions . COMMA array_elements
-   42 expressions: expressions . '+' expressions
-   43            | expressions . '-' expressions
-   44            | expressions . '*' expressions
-   45            | expressions . '/' expressions
-   46            | expressions . '^' expressions
-   47            | expressions . EQ expressions
-   48            | expressions . ASSIGN expressions
-   49            | expressions . '>' expressions
-   50            | expressions . '<' expressions
-   59 array_manipulate: expressions . DOT MAP LPARENTHESES IDENTIFIER ARROW expressions RPARENTHESES
+   15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list . RPARENTHESES LBRACE statements RBRACE
 
-    ASSIGN  shift, and go to state 49
-    COMMA   shift, and go to state 108
-    DOT     shift, and go to state 52
-    EQ      shift, and go to state 53
-    '-'     shift, and go to state 54
-    '+'     shift, and go to state 55
-    '*'     shift, and go to state 56
-    '/'     shift, and go to state 57
-    '^'     shift, and go to state 58
-    '>'     shift, and go to state 59
-    '<'     shift, and go to state 60
-
-    $default  reduce using rule 16 (parameter_list)
+    RPARENTHESES  shift, and go to state 108
 
 
 State 96
@@ -1851,23 +1804,11 @@ State 99
 
    60 async_function: ASYNC FUNCTION IDENTIFIER LPARENTHESES . parameter_list RPARENTHESES LBRACE statements RBRACE
 
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LBRACKET      shift, and go to state 12
-    RBRACKET      shift, and go to state 13
-    LPARENTHESES  shift, and go to state 14
-    AWAIT         shift, and go to state 16
+    IDENTIFIER  shift, and go to state 94
 
     $default  reduce using rule 18 (parameter_list)
 
-    parameter_list    go to state 110
-    expressions       go to state 95
-    wait_expression   go to state 28
-    array_manipulate  go to state 29
-    array             go to state 31
+    parameter_list  go to state 110
 
 
 State 100
@@ -1939,30 +1880,20 @@ State 106
 
 State 107
 
-   15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES . LBRACE statements RBRACE
+   17 parameter_list: IDENTIFIER COMMA . parameter_list
 
-    LBRACE  shift, and go to state 114
+    IDENTIFIER  shift, and go to state 94
+
+    $default  reduce using rule 18 (parameter_list)
+
+    parameter_list  go to state 114
 
 
 State 108
 
-   17 parameter_list: expressions COMMA . array_elements
+   15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES . LBRACE statements RBRACE
 
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    BOOLEAN       shift, and go to state 11
-    LBRACKET      shift, and go to state 12
-    RBRACKET      shift, and go to state 13
-    LPARENTHESES  shift, and go to state 14
-    AWAIT         shift, and go to state 16
-
-    expressions       go to state 38
-    wait_expression   go to state 28
-    array_manipulate  go to state 29
-    array             go to state 31
-    array_elements    go to state 115
+    LBRACE  shift, and go to state 115
 
 
 State 109
@@ -2065,6 +1996,13 @@ State 113
 
 State 114
 
+   17 parameter_list: IDENTIFIER COMMA parameter_list .
+
+    $default  reduce using rule 17 (parameter_list)
+
+
+State 115
+
    15 function_declaration: FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE . statements RBRACE
 
     LET           shift, and go to state 1
@@ -2100,13 +2038,6 @@ State 114
     array_manipulate      go to state 29
     async_function        go to state 30
     array                 go to state 31
-
-
-State 115
-
-   17 parameter_list: expressions COMMA array_elements .
-
-    $default  reduce using rule 17 (parameter_list)
 
 
 State 116
@@ -2266,7 +2197,7 @@ State 127
 
 State 128
 
-   33 else_declaration: ELSE . LBRACE $@3 statements RBRACE statements RBRACE
+   33 else_declaration: ELSE . LBRACE $@3 statements RBRACE
 
     LBRACE  shift, and go to state 130
 
@@ -2280,7 +2211,7 @@ State 129
 
 State 130
 
-   33 else_declaration: ELSE LBRACE . $@3 statements RBRACE statements RBRACE
+   33 else_declaration: ELSE LBRACE . $@3 statements RBRACE
 
     $default  reduce using rule 32 ($@3)
 
@@ -2289,7 +2220,7 @@ State 130
 
 State 131
 
-   33 else_declaration: ELSE LBRACE $@3 . statements RBRACE statements RBRACE
+   33 else_declaration: ELSE LBRACE $@3 . statements RBRACE
 
     LET           shift, and go to state 1
     IF            shift, and go to state 2
@@ -2328,59 +2259,13 @@ State 131
 
 State 132
 
-   33 else_declaration: ELSE LBRACE $@3 statements . RBRACE statements RBRACE
+   33 else_declaration: ELSE LBRACE $@3 statements . RBRACE
 
     RBRACE  shift, and go to state 133
 
 
 State 133
 
-   33 else_declaration: ELSE LBRACE $@3 statements RBRACE . statements RBRACE
-
-    LET           shift, and go to state 1
-    IF            shift, and go to state 2
-    IDENTIFIER    shift, and go to state 3
-    NUMBER        shift, and go to state 4
-    FLOAT         shift, and go to state 5
-    STRING        shift, and go to state 6
-    CONSOLE_LOG   shift, and go to state 7
-    CONST         shift, and go to state 8
-    RETURN        shift, and go to state 9
-    FUNCTION      shift, and go to state 10
-    BOOLEAN       shift, and go to state 11
-    LBRACKET      shift, and go to state 12
-    RBRACKET      shift, and go to state 13
-    LPARENTHESES  shift, and go to state 14
-    ASYNC         shift, and go to state 15
-    AWAIT         shift, and go to state 16
-
-    $default  reduce using rule 3 (statements)
-
-    statements            go to state 134
-    statement             go to state 19
-    variable_declaration  go to state 20
-    function_declaration  go to state 21
-    function_call         go to state 22
-    console_log           go to state 23
-    expression_statement  go to state 24
-    return_statement      go to state 25
-    if_statement          go to state 26
-    expressions           go to state 27
-    wait_expression       go to state 28
-    array_manipulate      go to state 29
-    async_function        go to state 30
-    array                 go to state 31
-
-
-State 134
-
-   33 else_declaration: ELSE LBRACE $@3 statements RBRACE statements . RBRACE
-
-    RBRACE  shift, and go to state 135
-
-
-State 135
-
-   33 else_declaration: ELSE LBRACE $@3 statements RBRACE statements RBRACE .
+   33 else_declaration: ELSE LBRACE $@3 statements RBRACE .
 
     $default  reduce using rule 33 (else_declaration)

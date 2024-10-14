@@ -53,7 +53,7 @@
 %right '^'
 %left '>' '<' '='
 
-%type <ystr> expressions parameter_list argument_list statements function_call interpolated_expression interpolated_part array array_elements array_manipulate async_function console_arguments wait_expression
+%type <ystr> expressions parameter_list argument_list function_call array array_elements array_manipulate async_function console_arguments wait_expression statement statements
 
 %%
 begin : 
@@ -61,20 +61,20 @@ begin :
 ;
 
 statements:
-    statement statements
-    | /* empty */ { fprintf(output, ""); }
+    statement statements { asprintf(&$$, "%s\n%s", $1, $2); }
+    | /* empty */ { $$ = strdup(""); }
 ;
 
 statement:
-    variable_declaration
-    | variable_declaration SEMICOLON
-    | function_declaration
-    | async_function
-    | console_log
-    | expression_statement
-    | return_statement
-    | if_statement
-    | function_call
+    variable_declaration { $$ = strdup(""); }
+    | variable_declaration SEMICOLON { $$ = strdup(""); }
+    | function_declaration { $$ = strdup(""); }
+    | async_function { $$ = strdup(""); }
+    | console_log { $$ = strdup(""); }
+    | expression_statement { $$ = strdup(""); }
+    | return_statement { $$ = strdup(""); }
+    | if_statement { $$ = strdup(""); }
+    | function_call { $$ = strdup(""); }
 ;
 
 variable_declaration:
@@ -86,10 +86,17 @@ function_declaration:
     FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE
 ;
 
+
 parameter_list:
-    expressions
-    | expressions COMMA array_elements { asprintf(&$$, "%s, %s", $1, $3); }
-    | /* empty */
+    IDENTIFIER {
+        asprintf(&$$, "%s string", $1); 
+    }
+    | IDENTIFIER COMMA parameter_list {
+        asprintf(&$$, "%s string, %s", $1, $3);
+    }
+    | /* empty */ {
+        $$ = strdup("");  
+    }
 ;
 
 function_call:
@@ -99,7 +106,7 @@ function_call:
 argument_list:
     expressions
     | expressions COMMA argument_list
-    | /* empty */
+    | /* empty */ { $$ = strdup(""); }
 ;
 
 console_log:
@@ -129,7 +136,7 @@ if_statement:
 ;
 
 else_declaration:
-    ELSE LBRACE { fprintf(output, "else {\n\t"); } statements RBRACE  statements RBRACE { fprintf(output, "\n}\n"); }
+    ELSE LBRACE { fprintf(output, "else {\n\t"); } statements RBRACE { fprintf(output, "\n}\n"); }
     | /* empty */
 ;
 
@@ -159,8 +166,8 @@ expressions:
 ;
 
 wait_expression:
-    AWAIT IDENTIFIER expressions
-    | AWAIT IDENTIFIER DOT IDENTIFIER
+    AWAIT IDENTIFIER expressions { asprintf(&$$, "await %s %s", $2, $3); }
+    | AWAIT IDENTIFIER DOT IDENTIFIER { asprintf(&$$, "await %s.%s", $2, $4); }
 ;
 
 array_manipulate:
@@ -171,17 +178,20 @@ array_manipulate:
 
 async_function:
     ASYNC FUNCTION IDENTIFIER LPARENTHESES parameter_list RPARENTHESES LBRACE statements RBRACE {
-        fprintf(output, "func %s(%s string) (data map[any]interface{}, err error) {\n", $3, $5);
-        fprintf(output, "\tresp, err := http.Get(%s)\n", $5);
-        fprintf(output, "\tif err != nil {\n\t\treturn nil, err\n\t}\n");
-        fprintf(output, "\tdefer resp.Body.Close()\n");
-        fprintf(output, "\terr = json.NewDecoder(resp.Body).Decode(&data)\n");
-        fprintf(output, "\treturn data, err\n");
-        fprintf(output, "}\n");
+        fprintf(output, "func %s(%s string) (data map[any]interface{}, err error) {", $3, $5);
+        fprintf(output, "}");
     }
 ;
 
-interpolated_expression:
+
+
+/* async_function_call:
+    ASYNC FUNCTION IDENTIFIER LPARENTHESES argument_list RPARENTHESES{
+        fprintf(output, "%s(%s)", $3, $5);
+    }
+; */
+
+/* interpolated_expression:
     interpolated_part { $$ = strdup($1); }
     | interpolated_expression interpolated_part { asprintf(&$$, "%s%s", $1, $2); }
 ;
@@ -189,7 +199,7 @@ interpolated_expression:
 interpolated_part:
     STRING { $$ = strdup($1); }
     | DOLLAR LBRACE expressions RBRACE { asprintf(&$$, "${%s}", $3); }
-;
+; */
 
 array:
     LBRACKET array_elements RBRACKET { asprintf(&$$, "[]any{%s}", $2); }
@@ -208,7 +218,6 @@ main( int argc, char *argv[] )
 }
 
 yyerror (char *s) /* Called by yyparse on error */
-
 {
-printf ("%s  na linha %d\n", s, yylineno );
+    printf ("%s  na linha %d\n", s, yylineno );
 }

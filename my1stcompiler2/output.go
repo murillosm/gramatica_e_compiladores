@@ -39,16 +39,7 @@ for i, n := range numbers {
 
 
 
-func fetchData(numbers string) (data map[any]interface{}, err error) {
-	resp, err := http.Get(numbers)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	err = json.NewDecoder(resp.Body).Decode(&data)
-	return data, err
-}
-
+func fetchData( string) (data map[any]interface{}, err error) {}
 
 
 
